@@ -16,6 +16,12 @@ public class Attendance{
         this.status = "";
     };
 
+    public Attendance(String albumNumber, String date){
+        this.albumNumber = albumNumber;
+        this.date = date;
+    };
+
+
     public Attendance(String albumNumber, String date, String status){
         this.albumNumber = albumNumber;
         this.date = date;

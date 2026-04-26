@@ -1,4 +1,4 @@
-package pl.projekt.database;
+package pl.projekt.repository;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -30,7 +30,7 @@ public class AttendanceRepository{
     }
 
     public Boolean isPresent(String albumNumber, String date){
-        String request = "SELECT 1 FROM Attendance WHERE albumNumber=?, date=?;";
+        String request = "SELECT 1 FROM Attendance WHERE albumNumber=? AND date=?;";
         
         try (Connection myConnection = DriverManager.getConnection(URL);
             PreparedStatement myStatement = myConnection.prepareStatement(request)){
