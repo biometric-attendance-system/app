@@ -8,11 +8,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import pl.projekt.models.Attendance;
 
-public class AttendanceService{
+public class AttendanceRepository{
 
     private final String URL = "jdbc:sqlite:Attendance_db.db";
 
-    public AttendanceService() { createTable(); }
+    public AttendanceRepository() { createTable(); }
 
     public void addAttendance(Attendance attendance){
         String request = "INSERT INTO Attendance(albumNumber, date, status) Values(?,?,?);";

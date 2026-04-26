@@ -13,10 +13,10 @@ public class Attendance{
         this.albumNumber = albumNumber;
         LocalDate date = LocalDate.now();
         this.date = date.toString();
-        this.status = status;
+        this.status = "";
     };
 
-    public Attendance(String albumNumber, String date, String time){
+    public Attendance(String albumNumber, String date, String status){
         this.albumNumber = albumNumber;
         this.date = date;
         this.status = status;

@@ -12,7 +12,6 @@ public class StatisticsService{
 
     private final String URL = "jdbc:sqlite:Statistics_db.db";
 
-    public 
 
 
 

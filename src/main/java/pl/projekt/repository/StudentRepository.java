@@ -1,4 +1,4 @@
-package pl.projekt.database;
+package pl.projekt.repository;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,10 +8,10 @@ import java.sql.Statement;
 
 import pl.projekt.models.Student;
 
-public class StudentService{
+public class StudentRepository{
     private final String URL = "jdbc:sqlite:Student_db.db";
     
-    public StudentService(){
+    public StudentRepository(){
         createTable();
     }
 

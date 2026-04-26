@@ -1,4 +1,4 @@
-package pl.projekt.database;
+package pl.projekt.repository;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,10 +9,10 @@ import java.sql.Statement;
 import pl.projekt.models.Lecturer;
 
 
-public class LecturerService{
+public class LecturerRepository{
     private final String URL = "jdbc:sqlite:Lecturer_db.db";
 
-    public LecturerService(){
+    public LecturerRepository(){
         createTable();
     }
 
@@ -44,7 +44,6 @@ public class LecturerService{
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
-
         return false;
     }
 
@@ -110,7 +109,7 @@ public class LecturerService{
     private void createTable() {
         try (Connection myConnection = DriverManager.getConnection(URL);
             Statement myStatement = myConnection.createStatement()){
-            String request = "CREATE TABLE IF NOT EXISTS Lecturers(ID TEXT PRIMARY KEY, firstName TEXT, lastName TEXT, biometricData TEXT, pinHash TEXT); ";
+            String request = "CREATE TABLE IF NOT EXISTS Lecturers(ID TEXT PRIMARY KEY,firstName TEXT,lastName TEXT,biometricData TEXT, pinHash TEXT); ";
             
             myStatement.execute(request);
             
