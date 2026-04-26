@@ -32,8 +32,8 @@ public class Student{
     public void setAlbumNumber(String albumNumber) {this.albumNumber = albumNumber;}
     public void setBiometricData(String biometricData) {this.biometricData = biometricData;}
 
-    public String getFirstName(){return firstName;}
-    public String getLastName(){return lastName;}
-    public String getAlbumNumber(){return albumNumber;}
-    public String getBiometricData(){return biometricData;}
+    public String getFirstName() {return firstName;}
+    public String getLastName() {return lastName;}
+    public String getAlbumNumber() {return albumNumber;}
+    public String getBiometricData() {return biometricData;}
 }

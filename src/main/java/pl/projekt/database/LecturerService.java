@@ -44,6 +44,7 @@ public class LecturerService{
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
+
         return false;
     }
 
@@ -96,7 +97,7 @@ public class LecturerService{
             myStatement.setString(1, lecturer.getFirstName());
             myStatement.setString(2, lecturer.getLastName());
             myStatement.setString(3, lecturer.getBiometricData());
-            myStatement.setString(3, lecturer.getPinHash());
+            myStatement.setString(4, lecturer.getPinHash());
             myStatement.setString(5, lecturer.getID());
 
             myStatement.executeUpdate();
@@ -109,7 +110,7 @@ public class LecturerService{
     private void createTable() {
         try (Connection myConnection = DriverManager.getConnection(URL);
             Statement myStatement = myConnection.createStatement()){
-            String request = "CREATE TABLE IF NOT EXISTS Lecturers(ID TEXT PRIMARY KEY,firstName TEXT,lastName TEXT,biometricData TEXT, pinHash TEXT); ";
+            String request = "CREATE TABLE IF NOT EXISTS Lecturers(ID TEXT PRIMARY KEY, firstName TEXT, lastName TEXT, biometricData TEXT, pinHash TEXT); ";
             
             myStatement.execute(request);
             

@@ -35,6 +35,7 @@ public class App extends Application {
         Student Stud = new Student();
         LecturerService LectServ = new LecturerService();
         Lecturer Lect = new Lecturer();
+        
 
         /*
         Student stud = new Student("szym","k","23");
