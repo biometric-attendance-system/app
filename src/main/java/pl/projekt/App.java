@@ -4,8 +4,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import pl.projekt.database.LecturerService;
-import pl.projekt.database.StudentService;
 import pl.projekt.models.Lecturer;
 import pl.projekt.models.Student;
 //import nu.pattern.OpenCV;
