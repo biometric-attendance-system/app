@@ -16,39 +16,24 @@ public class LecturerRepository{
         createTable();
     }
 
-    public void deleteLecturer(String ID){
+    public boolean deleteLecturer(String ID){
         String request = "DELETE FROM Lecturers WHERE ID = ?;";
         try (Connection myConnection = DriverManager.getConnection(URL);
             PreparedStatement myStatement = myConnection.prepareStatement(request)){
             
             myStatement.setString(1, ID);
 
-            myStatement.executeUpdate();
+            int rowsAffected = myStatement.executeUpdate();
 
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public Boolean isLecturerInTable(String ID){
-        String request = "SELECT 1 FROM Lecturers WHERE ID=?;";
-        
-        try (Connection myConnection = DriverManager.getConnection(URL);
-            PreparedStatement myStatement = myConnection.prepareStatement(request)){
-            
-            myStatement.setString(1, ID);
-            ResultSet answer = myStatement.executeQuery();
-
-            return answer.next();
-
+            return rowsAffected > 0;
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
         return false;
     }
 
-    public void addLecturer(Lecturer lecturer){
-        String request = "INSERT INTO Lecturers(firstName, lastName, ID, biometricData, pinHash) Values(?,?,?,?,?);";
+    public boolean addLecturer(Lecturer lecturer){
+        String request = "INSERT OR IGNORE INTO Lecturers(firstName, lastName, ID, biometricData, pinHash) Values(?,?,?,?,?);";
         
         try (Connection myConnection = DriverManager.getConnection(URL);
             PreparedStatement myStatement = myConnection.prepareStatement(request)){
@@ -59,11 +44,13 @@ public class LecturerRepository{
             myStatement.setString(4, lecturer.getBiometricData());
             myStatement.setString(5, lecturer.getPinHash());
 
-            myStatement.executeUpdate();
+            int rowsAffected = myStatement.executeUpdate();
             
+            return rowsAffected > 0;
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
+        return false;
     }
 
     public Lecturer getLecturer(String ID){
@@ -87,7 +74,7 @@ public class LecturerRepository{
         return null;
     }
 
-    public void setLecturer(Lecturer lecturer){
+    public boolean setLecturer(Lecturer lecturer){
         String request = "UPDATE Lecturers SET firstName = ?, lastName = ?, biometricData = ?, pinHash = ? WHERE ID = ?;";
 
         try (Connection myConnection = DriverManager.getConnection(URL);
@@ -99,11 +86,13 @@ public class LecturerRepository{
             myStatement.setString(4, lecturer.getPinHash());
             myStatement.setString(5, lecturer.getID());
 
-            myStatement.executeUpdate();
+            int rowsAffected = myStatement.executeUpdate();
 
+            return rowsAffected > 0;
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
+        return false;
     }
 
     private void createTable() {

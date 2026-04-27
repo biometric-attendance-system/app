@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import pl.projekt.models.Student;
 
@@ -15,8 +16,8 @@ public class StudentRepository{
         createTable();
     }
 
-    public void addStudent(Student student){
-        String request = "INSERT INTO Students(firstName, lastName, albumNumber, biometricData) Values(?,?,?,?);";
+    public boolean addStudent(Student student){
+        String request = "INSERT OR IGNORE INTO Students(firstName, lastName, albumNumber, biometricData) Values(?,?,?,?);";
         
         try (Connection myConnection = DriverManager.getConnection(URL);
             PreparedStatement myStatement = myConnection.prepareStatement(request)){
@@ -26,42 +27,52 @@ public class StudentRepository{
             myStatement.setString(3, student.getAlbumNumber());
             myStatement.setString(4, student.getBiometricData());
 
-            myStatement.executeUpdate();
+            int rowsAffected = myStatement.executeUpdate();
+            return rowsAffected > 0;
             
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
+        return false;
     }
 
-    public void deleteStudent(String albumNumber){
+    public boolean deleteStudent(String albumNumber){
         String request = "DELETE FROM Students WHERE albumNumber = ?;";
         try (Connection myConnection = DriverManager.getConnection(URL);
             PreparedStatement myStatement = myConnection.prepareStatement(request)){
             
             myStatement.setString(1, albumNumber);
 
-            myStatement.executeUpdate();
+            int rowsAffected = myStatement.executeUpdate();
 
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public Boolean isStudentInTable(String albumNumber){
-        String request = "SELECT 1 FROM Students WHERE albumNumber=?;";
-        
-        try (Connection myConnection = DriverManager.getConnection(URL);
-            PreparedStatement myStatement = myConnection.prepareStatement(request)){
-            
-            myStatement.setString(1, albumNumber);
-            ResultSet answer = myStatement.executeQuery();
-
-            return answer.next();
-
+            return rowsAffected > 0;
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
         return false;
+    }
+
+
+    public ArrayList<Student> getStudents(){
+        String request = "SELECT * FROM Student;";
+
+        try (Connection myConnection = DriverManager.getConnection(URL);
+            PreparedStatement myStatement = myConnection.prepareStatement(request)){
+            
+            ResultSet ans = myStatement.executeQuery();
+            ArrayList<Student> studentList = new ArrayList<>();
+
+            while (ans.next()){ 
+                studentList.add(new Student(ans.getString("firstName"), ans.getString("lastName"),
+                              ans.getString("albumNumber"), ans.getString("biometricData")));
+            }
+
+            return studentList;
+
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
     public Student getStudent(String albumNumber){
@@ -85,7 +96,7 @@ public class StudentRepository{
         return null;
     }
 
-    public void setStudent(Student student){
+    public boolean setStudent(Student student){
         String request = "UPDATE Students SET firstName = ?, lastName = ?, biometricData = ? WHERE albumNumber = ?;";
 
         try (Connection myConnection = DriverManager.getConnection(URL);
@@ -96,11 +107,13 @@ public class StudentRepository{
             myStatement.setString(3, student.getBiometricData());
             myStatement.setString(4, student.getAlbumNumber());
 
-            myStatement.executeUpdate();
+            int rowsAffected = myStatement.executeUpdate();
+            return rowsAffected > 0;
 
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
+        return false;
     }
 
     private void createTable() {
