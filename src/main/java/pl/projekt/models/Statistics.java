@@ -1,6 +1,7 @@
 package pl.projekt.models;
 
 public class Statistics{
+    
     private final String albumNumber;
     private final String firstName;
     private final String lastName;
@@ -16,10 +17,12 @@ public class Statistics{
         this.all = all;
         this.mean = mean;
     }
-    public String getFirstName() {return firstName;}
-    public String getLastName() {return lastName;}
-    public String getAlbumNumber() {return albumNumber;}
-    public Integer getPresent() {return present;}
-    public Integer getAll() {return all;}
-    public Double getMean() {return mean;}
+
+    public String getFirstName() { return firstName; }
+    public String getLastName() { return lastName; }
+    public String getAlbumNumber() { return albumNumber; }
+    public Integer getPresent() { return present; }
+    public Integer getAll() { return all; }
+    public Double getMean() { return mean; }
+
 }

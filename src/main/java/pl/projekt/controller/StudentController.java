@@ -12,7 +12,7 @@ public class StudentController{
 
     private TextField albumNumberField;
 
-    private StudentService service = new StudentService();
+    private final StudentService service = new StudentService();
 
     public void addStudent(){
         Student student = new Student(nameField.getText(), surnameField.getText(), albumNumberField.getText());

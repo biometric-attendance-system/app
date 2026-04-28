@@ -1,6 +1,5 @@
 package pl.projekt.service;
 import java.util.ArrayList;
-
 import pl.projekt.models.Statistics;
 import pl.projekt.models.Student;
 
@@ -9,12 +8,18 @@ public class StatisticsService{
     private final StudentService studentService;
     private final AttendanceService attendanceService;
 
+    public StatisticsService(){
+        studentService = new StudentService();
+        attendanceService = new AttendanceService();
+    }
+
     public StatisticsService(StudentService studentService, AttendanceService attendanceService){
         this.attendanceService = attendanceService;
         this.studentService = studentService;
     }
     
     public ArrayList<Statistics> calculateStatistics(){
+
         ArrayList<Student> studentList = studentService.getStudents();
         ArrayList<Statistics> statsList = new ArrayList<>();
         

@@ -5,7 +5,12 @@ import pl.projekt.models.Attendance;
 import pl.projekt.repository.AttendanceRepository;
 
 public class AttendanceService{
+    
     private final AttendanceRepository repository;
+
+    public AttendanceService(){
+        repository = new AttendanceRepository();
+    }
 
     public AttendanceService(AttendanceRepository repository){
         this.repository = repository;
