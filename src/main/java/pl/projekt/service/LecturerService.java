@@ -3,6 +3,7 @@ import pl.projekt.models.Lecturer;
 import pl.projekt.repository.LecturerRepository;
 
 public class LecturerService{
+    
     private final LecturerRepository repository;
 
     public LecturerService(LecturerRepository repository){

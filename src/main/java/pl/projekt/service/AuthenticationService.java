@@ -2,6 +2,7 @@ package pl.projekt.service;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class AuthenticationService{
+    
     public static String pinToHash(String pin){
         if (pin == null || pin.isEmpty()) return null;
         return BCrypt.hashpw(pin, BCrypt.gensalt()); 

@@ -5,15 +5,18 @@ import pl.projekt.models.Student;
 import pl.projekt.repository.StudentRepository;
 
 public class StudentService{
+
     private final StudentRepository repository;
+
+    public StudentService() {
+        this.repository = new StudentRepository();
+    }
 
     public StudentService(StudentRepository repository){
         this.repository = repository;
     }
 
-
-
-    public Boolean deleteLecturer(String albumNumber){
+    public Boolean deleteStudent(String albumNumber){
         return repository.deleteStudent(albumNumber);
     }
 

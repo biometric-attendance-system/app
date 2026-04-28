@@ -5,6 +5,7 @@ import pl.projekt.models.Statistics;
 import pl.projekt.models.Student;
 
 public class StatisticsService{
+    
     private final StudentService studentService;
     private final AttendanceService attendanceService;
 
