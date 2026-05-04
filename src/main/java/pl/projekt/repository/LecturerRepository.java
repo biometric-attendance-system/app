@@ -65,7 +65,7 @@ public class LecturerRepository{
             
             if (ans.next()){ 
                 return new Lecturer(ans.getString("ID"), ans.getString("firstName"),
-                              ans.getString("lastName"), ans.getString("biometricData") ,ans.getString("pinHash"));
+                              ans.getString("lastName") ,ans.getString("pinHash"), ans.getString("biometricData"));
             }
 
         } catch (SQLException e){

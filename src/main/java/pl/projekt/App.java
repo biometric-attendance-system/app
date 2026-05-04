@@ -1,9 +1,13 @@
 package pl.projekt;
+import java.io.IOException;
+
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import pl.projekt.models.Lecturer;
+import pl.projekt.service.LecturerService;
 //import nu.pattern.OpenCV;
 
 
@@ -14,18 +18,24 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        stage.setTitle("Rejestrator obecnosci");
-        var javaVersion = SystemInfo.javaVersion();
-        var javafxVersion = SystemInfo.javafxVersion();
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/LoginView.fxml"));
 
-        var label = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
-        var scene = new Scene(new StackPane(label), 640, 480);
-        stage.setScene(scene);
-        stage.show();
+            Scene scene = new Scene(root, 400, 300);
+
+            stage.setTitle("Login Panel");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
     }
 
     public static void main(String[] args) {
         //OpenCV.loadLocally();
+        LecturerService s = new LecturerService();
+        s.addLecturer(new Lecturer("1","Rysiek","bla","mojpin", "twarz"));
         launch();
         
        

@@ -4,11 +4,7 @@ import pl.projekt.repository.LecturerRepository;
 
 public class LecturerService{
     
-    private final LecturerRepository repository;
-
-    public LecturerService(LecturerRepository repository){
-        this.repository = repository;
-    }
+    private final LecturerRepository repository = new LecturerRepository();
 
     public boolean deleteLecturer(String ID){
         return repository.deleteLecturer(ID);
