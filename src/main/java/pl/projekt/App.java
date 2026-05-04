@@ -7,7 +7,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.projekt.models.Lecturer;
+import javafx.application.Platform;
 import pl.projekt.service.LecturerService;
+import pl.projekt.controller.LoginController;
 //import nu.pattern.OpenCV;
 
 
@@ -19,12 +21,20 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/LoginView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LoginView.fxml"));
+            Parent root = loader.load();
+            LoginController loginController = loader.getController();
+            Scene scene = new Scene(root, 1000, 700);
 
-            Scene scene = new Scene(root, 400, 300);
-
-            stage.setTitle("Login Panel");
+            stage.setTitle("Biometric attendance system");
             stage.setScene(scene);
+
+            stage.setOnCloseRequest(event -> {
+                loginController.closeCamera(); 
+                Platform.exit(); 
+                System.exit(0);  
+            });
+
             stage.show();
         } catch (IOException e){
             e.printStackTrace();

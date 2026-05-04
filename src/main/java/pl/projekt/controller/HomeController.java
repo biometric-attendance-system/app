@@ -1,11 +1,29 @@
 package pl.projekt.controller;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.*;
-import javafx.stage.Stage;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 
 public class HomeController{
+    @FXML
+    private ImageView cameraView;
 
+    @FXML
+    private Label errorLabel;
+
+    @FXML
+    public void startStopRecording(){}
     
+    @FXML
+    public void addStudent(){}
+
+    @FXML
+    public void showStatistics(){}
+
+    @FXML 
+    public void showStudents(){}
+
+    @FXML 
+    public void showAttendance(){}
+
 
 }
