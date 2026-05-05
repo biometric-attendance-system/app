@@ -30,7 +30,7 @@ public class App extends Application {
             stage.setScene(scene);
 
             stage.setOnCloseRequest(event -> {
-                loginController.closeCamera(); 
+                loginController.stopRecording(); 
                 Platform.exit(); 
                 System.exit(0);  
             });
