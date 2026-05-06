@@ -1,4 +1,5 @@
 package pl.projekt.controller;
+
 import java.util.ArrayList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -17,7 +18,6 @@ public class StatisticsController {
     private TableColumn<Statistics, String> presentCol;
     private TableColumn<Statistics, String> allCol;
     
-
     private final StatisticsService statistics = new StatisticsService();
 
     public void initialize() {

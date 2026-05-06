@@ -1,30 +1,28 @@
 package pl.projekt.controller;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javafx.util.Duration;
-import pl.projekt.service.AuthenticationService;
 import pl.projekt.service.LecturerService;
-import pl.projekt.camera.CameraManager;
+import pl.projekt.service.AuthenticationService;
+import pl.projekt.util.CameraManager;
+
+import java.io.IOException;
 
 public class LoginController{
     @FXML
     private ImageView cameraView;
-
-    private CameraManager cameraManager;
-    private final ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
 
     @FXML
     private TextField name;
@@ -35,52 +33,54 @@ public class LoginController{
     @FXML
     private Label errorLabel;
 
-    LecturerService lecturerService = new LecturerService();
+    private final CameraManager cameraManager = new CameraManager();
+    private final LecturerService lecturerService = new LecturerService();
 
     public void stopRecording(){
-        if (timer != null && !timer.isShutdown()) {
-            timer.shutdown();
+        if(cameraManager.isCameraActive()){
+            cameraManager.closeCamera();
+            cameraView.setImage(null);
         }
-
-        cameraManager.closeCamera();
     }
 
     public void initialize(){
-
         nu.pattern.OpenCV.loadLocally();
-        cameraManager = new CameraManager();
 
-        if (cameraManager.open(0)){
+        boolean started = cameraManager.openCamera(frame -> {
+            Platform.runLater(() -> cameraView.setImage(frame));
+        });
 
-            Runnable frameGrabber = () -> {
-                Mat frame = cameraManager.getFrame();
-                if (!frame.empty()) {
-                    Image temp = cameraManager.matToImage(frame);
-                    Platform.runLater(() -> cameraView.setImage(temp));
-                    frame.release();
-                }
-            };
-
-            timer.scheduleAtFixedRate(frameGrabber, 0, 17L, TimeUnit.MILLISECONDS);
-
-        } else {    
-            System.out.println("Camera not opened");
+        if (!started) {
+            errorLabel.setText("Kamera niedostępna!");
         }
     }
 
     @FXML
-    public void handleLogin(){
+    public void handleLogin(ActionEvent event){
 
         if(!AuthenticationService.checkPin(password.getText(), lecturerService.getHashedPin(name.getText().trim()))){
             errorLabel.setText("Try again!");  
             PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
             
-            visiblePause.setOnFinished(event -> errorLabel.setText(""));
+            visiblePause.setOnFinished(ev -> errorLabel.setText(""));
             
             visiblePause.play();         
         } else {
             stopRecording();
-            //przechodzimy dalej
-            }
+            System.out.println("Zalogowano pomyślnie. Przechodzę do menu głównego.");
+            try{
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/pl/projekt/view/HomeScreenView.fxml"));
+                Parent root = loader.load();
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setTitle("Home screen");
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                if( errorLabel != null )
+                    errorLabel.setText("Error: can not load home screen");
+                e.printStackTrace();
+            } 
+        }
     }
 }

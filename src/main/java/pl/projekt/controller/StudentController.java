@@ -4,14 +4,12 @@ import javafx.scene.control.TextField;
 import pl.projekt.service.StudentService;
 import pl.projekt.models.Student;
 
+
 public class StudentController{
 
     private TextField nameField;
-
     private TextField surnameField;
-
     private TextField albumNumberField;
-
     private final StudentService service = new StudentService();
 
     public void addStudent(){
