@@ -44,21 +44,19 @@ public class LoginController{
     }
 
     public void initialize(){
-        nu.pattern.OpenCV.loadLocally();
-
         boolean started = cameraManager.openCamera(frame -> {
             Platform.runLater(() -> cameraView.setImage(frame));
         });
 
         if (!started) {
-            errorLabel.setText("Kamera niedostępna!");
+            errorLabel.setText("No camera found!");
         }
     }
 
     @FXML
     public void handleLogin(ActionEvent event){
 
-        if(!AuthenticationService.checkPin(password.getText(), lecturerService.getHashedPin(name.getText().trim()))){
+        if(!AuthenticationService.checkPin(password.getText().trim(), lecturerService.getHashedPin(name.getText().trim()))){
             errorLabel.setText("Try again!");  
             PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
             
@@ -67,9 +65,9 @@ public class LoginController{
             visiblePause.play();         
         } else {
             stopRecording();
-            System.out.println("Zalogowano pomyślnie. Przechodzę do menu głównego.");
+            System.out.println("Logged in succesfully. Changing view to home screen.");
             try{
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/pl/projekt/view/HomeScreenView.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/HomeScreenView.fxml"));
                 Parent root = loader.load();
 
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

@@ -1,5 +1,7 @@
 package pl.projekt.util;
 
+import pl.projekt.util.FaceDetector;
+
 import javafx.scene.image.Image;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -17,18 +19,20 @@ public class CameraManager {
 
     private VideoCapture capture;
     private ScheduledExecutorService timer;
-    private boolean cameraActive;
+    private volatile boolean cameraActive;
+    private FaceDetector faceDetector;
 
     static {
         try {
             nu.pattern.OpenCV.loadShared();
         } catch (UnsatisfiedLinkError e) {
-            System.err.println("Błąd OpenCV: " + e.getMessage());
+            System.err.println("Error loading OpenCV: " + e.getMessage());
         }
     }
 
     public CameraManager() {
         this.capture = new VideoCapture();
+        this.faceDetector = new FaceDetector();
         this.cameraActive = false;
     }
 
@@ -38,11 +42,17 @@ public class CameraManager {
             if(capture.isOpened()){
                 cameraActive = true;
 
+                final Mat frame = new Mat();
+                final MatOfByte buffer = new MatOfByte();
+
                 Runnable frameGrabber = () -> {
-                    Mat frame = new Mat();
-                    if(capture.read(frame)){
-                        //algorytmy rozpoznawania twarzy
-                        Image imageToShow = matToImage(frame);
+                    if (!cameraActive || !capture.isOpened()) return;
+
+                    if(capture.read(frame) && !frame.empty()){
+
+                        faceDetector.processFace(frame);
+                        Imgcodecs.imencode(".png", frame, buffer);
+                        Image imageToShow = new Image(new ByteArrayInputStream(buffer.toArray()));
                         onFrameCaptured.accept(imageToShow);
                     }
                 };
@@ -61,23 +71,22 @@ public class CameraManager {
 
     public void closeCamera() {
         if(cameraActive){
+            cameraActive = false;
+
             if(timer != null && !timer.isShutdown()){
                 try{
                     timer.shutdown();
-                    timer.awaitTermination(33, TimeUnit.MILLISECONDS);
+                    if (!timer.awaitTermination(200, TimeUnit.MILLISECONDS)){
+                        timer.shutdownNow();
+                    }
+
                 } catch(InterruptedException e){
-                    System.err.println("Błąd zatrzymania wątku: " + e.getMessage());
+                    System.err.println("Thread error: " + e.getMessage());
                 }
             }
-            if (capture.isOpened())
-                capture.release();
-            cameraActive = false;
+            if (capture.isOpened()) capture.release();
+            faceDetector.clean();
         }
     }
 
-    public Image matToImage(Mat frame) {
-        MatOfByte buffer = new MatOfByte();
-        Imgcodecs.imencode(".png", frame, buffer);
-        return new Image(new ByteArrayInputStream(buffer.toArray()));
-    }
 }

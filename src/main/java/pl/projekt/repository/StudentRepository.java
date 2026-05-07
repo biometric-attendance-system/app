@@ -17,7 +17,7 @@ public class StudentRepository{
     }
 
     public boolean addStudent(Student student){
-        String request = "INSERT OR IGNORE INTO Students(firstName, lastName, albumNumber, biometricData) Values(?,?,?,?);";
+        String request = "INSERT OR IGNORE INTO Students(firstName, lastName, albumNumber) Values(?,?,?,?);";
         
         try (Connection myConnection = DriverManager.getConnection(URL);
             PreparedStatement myStatement = myConnection.prepareStatement(request)){
@@ -25,7 +25,6 @@ public class StudentRepository{
             myStatement.setString(1, student.getFirstName());
             myStatement.setString(2, student.getLastName());
             myStatement.setString(3, student.getAlbumNumber());
-            myStatement.setString(4, student.getBiometricData());
 
             int rowsAffected = myStatement.executeUpdate();
             return rowsAffected > 0;
@@ -64,7 +63,7 @@ public class StudentRepository{
 
             while (ans.next()){ 
                 studentList.add(new Student(ans.getString("firstName"), ans.getString("lastName"),
-                              ans.getString("albumNumber"), ans.getString("biometricData")));
+                              ans.getString("albumNumber")));
             }
 
             return studentList;
@@ -87,7 +86,7 @@ public class StudentRepository{
             
             if (ans.next()){ 
                 return new Student(ans.getString("firstName"), ans.getString("lastName"),
-                              ans.getString("albumNumber"), ans.getString("biometricData"));
+                              ans.getString("albumNumber"));
             }
 
         } catch (SQLException e){
@@ -97,15 +96,13 @@ public class StudentRepository{
     }
 
     public boolean setStudent(Student student){
-        String request = "UPDATE Students SET firstName = ?, lastName = ?, biometricData = ? WHERE albumNumber = ?;";
+        String request = "UPDATE Students SET firstName = ?, lastName = ? WHERE albumNumber = ?;";
 
         try (Connection myConnection = DriverManager.getConnection(URL);
             PreparedStatement myStatement = myConnection.prepareStatement(request)){
             
             myStatement.setString(1, student.getFirstName());
             myStatement.setString(2, student.getLastName());
-            myStatement.setString(3, student.getBiometricData());
-            myStatement.setString(4, student.getAlbumNumber());
 
             int rowsAffected = myStatement.executeUpdate();
             return rowsAffected > 0;
@@ -119,7 +116,7 @@ public class StudentRepository{
     private void createTable() {
         try (Connection myConnection = DriverManager.getConnection(URL);
             Statement myStatement = myConnection.createStatement()){
-            String request = "CREATE TABLE IF NOT EXISTS Students(albumNumber TEXT PRIMARY KEY,firstName TEXT,lastName TEXT,biometricData TEXT); ";
+            String request = "CREATE TABLE IF NOT EXISTS Students(albumNumber TEXT PRIMARY KEY,firstName TEXT,lastName TEXT); ";
             
             myStatement.execute(request);
             

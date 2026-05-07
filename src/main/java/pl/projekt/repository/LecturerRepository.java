@@ -33,7 +33,7 @@ public class LecturerRepository{
     }
 
     public boolean addLecturer(Lecturer lecturer){
-        String request = "INSERT OR IGNORE INTO Lecturers(firstName, lastName, ID, biometricData, pinHash) Values(?,?,?,?,?);";
+        String request = "INSERT OR IGNORE INTO Lecturers(firstName, lastName, ID,  pinHash) Values(?,?,?,?);";
         
         try (Connection myConnection = DriverManager.getConnection(URL);
             PreparedStatement myStatement = myConnection.prepareStatement(request)){
@@ -41,8 +41,7 @@ public class LecturerRepository{
             myStatement.setString(1, lecturer.getFirstName());
             myStatement.setString(2, lecturer.getLastName());
             myStatement.setString(3, lecturer.getID());
-            myStatement.setString(4, lecturer.getBiometricData());
-            myStatement.setString(5, lecturer.getPinHash());
+            myStatement.setString(4, lecturer.getPinHash());
 
             int rowsAffected = myStatement.executeUpdate();
             
@@ -65,7 +64,7 @@ public class LecturerRepository{
             
             if (ans.next()){ 
                 return new Lecturer(ans.getString("ID"), ans.getString("firstName"),
-                              ans.getString("lastName") ,ans.getString("pinHash"), ans.getString("biometricData"));
+                              ans.getString("lastName") ,ans.getString("pinHash"));
             }
 
         } catch (SQLException e){
@@ -75,16 +74,15 @@ public class LecturerRepository{
     }
 
     public boolean setLecturer(Lecturer lecturer){
-        String request = "UPDATE Lecturers SET firstName = ?, lastName = ?, biometricData = ?, pinHash = ? WHERE ID = ?;";
+        String request = "UPDATE Lecturers SET firstName = ?, lastName = ?, pinHash = ? WHERE ID = ?;";
 
         try (Connection myConnection = DriverManager.getConnection(URL);
             PreparedStatement myStatement = myConnection.prepareStatement(request)){
             
             myStatement.setString(1, lecturer.getFirstName());
             myStatement.setString(2, lecturer.getLastName());
-            myStatement.setString(3, lecturer.getBiometricData());
-            myStatement.setString(4, lecturer.getPinHash());
-            myStatement.setString(5, lecturer.getID());
+            myStatement.setString(3, lecturer.getPinHash());
+            myStatement.setString(4, lecturer.getID());
 
             int rowsAffected = myStatement.executeUpdate();
 
@@ -98,7 +96,7 @@ public class LecturerRepository{
     private void createTable() {
         try (Connection myConnection = DriverManager.getConnection(URL);
             Statement myStatement = myConnection.createStatement()){
-            String request = "CREATE TABLE IF NOT EXISTS Lecturers(ID TEXT PRIMARY KEY,firstName TEXT,lastName TEXT,biometricData TEXT, pinHash TEXT); ";
+            String request = "CREATE TABLE IF NOT EXISTS Lecturers(ID TEXT PRIMARY KEY,firstName TEXT,lastName TEXT, pinHash TEXT); ";
             
             myStatement.execute(request);
             

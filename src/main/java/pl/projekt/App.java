@@ -37,15 +37,15 @@ public class App extends Application {
 
             stage.show();
         } catch (IOException e){
+            System.out.println("Error: In application start");
             e.printStackTrace();
         }
 
     }
 
     public static void main(String[] args) {
-        //OpenCV.loadLocally();
         LecturerService s = new LecturerService();
-        s.addLecturer(new Lecturer("1","Rysiek","bla","mojpin", "twarz"));
+        s.addLecturer(new Lecturer("1","Rysiek","bla","mojpin"));
         launch();
         
        

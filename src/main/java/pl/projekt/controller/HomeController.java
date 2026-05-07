@@ -29,7 +29,9 @@ public class HomeController{
             cameraManager.closeCamera();
             cameraView.setImage(null);
         } else {
-            boolean success = cameraManager.openCamera(frame -> Platform.runLater(() -> cameraView.setImage(frame)));
+            boolean success = cameraManager.openCamera(frame -> {
+                Platform.runLater( () -> cameraView.setImage(frame)); 
+            });
 
             if (!success)
                 errorLabel.setText("Błąd! Nie wykryto kamery.");

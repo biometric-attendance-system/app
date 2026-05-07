@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+
+
+<HBox spacing ="30.0" alignment="TOP_CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="pl.projekt.controller.HomeController">
+    <VBox spacing="10.0" alignment="TOP_LEFT" >
+
+        <Button text = "Add student" onAction="#addStudent"/>
+        <Button text = "Show statistics" onAction="#showStatistics"/>
+        <Button text = "Show students" onAction="#showStudents"/>
+        <Button text = "Show attendance" onAction="#showAttendance"/>
+        
+    </VBox>
+
+    <VBox spacing="10.0" alignment="center" >
+        <ImageView fx:id="cameraView" fitWidth="640" fitHeight="480" preserveRatio="true"/>
+        <Button text = "Start/Stop recording" onAction="#startStopRecording"/>
+        <Label fx:id="errorLabel" alignment="center"/>
+    </VBox>
+</HBox>
