@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="pl.projekt.controller.StudentController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Search:"/>
+        <TextField fx:id="filterField" promptText="Type name, surname or album number..." HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <TableView fx:id="studentTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="nameCol" text="first name" prefWidth="150"/>
+            <TableColumn fx:id="surNameCol" text="last name" prefWidth="150"/>
+            <TableColumn fx:id="albumNumberCol" text="album number" prefWidth="150"/>
+        </columns>
+    </TableView>
+
+    
+    <Label fx:id="status" text="" style="-fx-text-fill: red;"/>
+</VBox>

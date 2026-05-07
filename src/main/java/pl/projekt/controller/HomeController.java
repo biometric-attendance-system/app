@@ -42,22 +42,22 @@ public class HomeController{
     
     @FXML
     public void addStudent(ActionEvent event){
-        loadScene(event, "/pl/projekt/resources/AddStudentView.fxml", "Add Student");
+        loadScene(event, "/AddStudentView.fxml", "Add Student");
     }
 
     @FXML
     public void showStatistics(ActionEvent event){
-        loadScene(event, "/pl/projekt/resources/StatisticsView.fxml", "Statistics");
+        loadScene(event, "/StatisticsView.fxml", "Statistics");
     }
 
     @FXML 
     public void showStudents(ActionEvent event){
-        loadScene(event, "/pl/projekt/resources/StudentsView.fxml", "Students List");
+        loadScene(event, "/StudentsView.fxml", "Students List");
     }
 
     @FXML 
     public void showAttendance(ActionEvent event){
-        loadScene(event, "/pl/projekt/resources/AttendanceView.fxml", "Attendance");
+        loadScene(event, "/AttendanceView.fxml", "Attendance");
     }
 
     private void loadScene(ActionEvent event, String fxmlPath, String title){

@@ -53,7 +53,7 @@ public class StudentRepository{
 
 
     public ArrayList<Student> getStudents(){
-        String request = "SELECT * FROM Student;";
+        String request = "SELECT * FROM Students;";
 
         try (Connection myConnection = DriverManager.getConnection(URL);
             PreparedStatement myStatement = myConnection.prepareStatement(request)){
