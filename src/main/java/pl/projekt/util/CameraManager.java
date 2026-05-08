@@ -58,7 +58,7 @@ public class CameraManager {
                 };
 
                 timer = Executors.newSingleThreadScheduledExecutor();
-                timer.scheduleAtFixedRate(frameGrabber, 0 , 33, TimeUnit.MILLISECONDS);
+                timer.scheduleAtFixedRate(frameGrabber, 0 , 33L, TimeUnit.MILLISECONDS);
                 return true;
             }
         }

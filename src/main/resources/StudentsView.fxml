@@ -10,11 +10,17 @@
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Search:"/>
-        <TextField fx:id="filterField" promptText="Type name, surname or album number..." HBox.hgrow="ALWAYS"/>
-    </HBox>
-
+    <VBox spacing="10" alignment = "CENTER_LEFT">
+        <HBox spacing="10" alignment="CENTER_LEFT"> 
+            <Button text="Home" onAction="#goHome"/>
+            <Label fx:id="errorLabel"/>
+        </HBox>
+        <Separator/>
+        <HBox spacing="10" alignment="CENTER_LEFT">        
+            <Label text="Search:"/>
+            <TextField fx:id="filterField" promptText="Type name, surname or album number..." HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </VBox>
     <TableView fx:id="studentTable" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="nameCol" text="first name" prefWidth="150"/>
@@ -22,7 +28,5 @@
             <TableColumn fx:id="albumNumberCol" text="album number" prefWidth="150"/>
         </columns>
     </TableView>
-
     
-    <Label fx:id="status" text="" style="-fx-text-fill: red;"/>
 </VBox>

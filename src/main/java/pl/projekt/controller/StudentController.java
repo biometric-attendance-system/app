@@ -4,6 +4,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.event.ActionEvent;
+import java.io.IOException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -15,13 +22,14 @@ import pl.projekt.models.Student;
 
 public class StudentController{
 
+    @FXML private Label errorLabel;   
     @FXML private TableView<Student> studentTable;
     @FXML private TableColumn<Student, String> nameCol;
     @FXML private TableColumn<Student, String> surNameCol;
     @FXML private TableColumn<Student, String> albumNumberCol;
 
     @FXML private TextField filterField;
-    @FXML private Label status;
+    //@FXML private Label status;
 
     private final StudentService service = new StudentService();
     private ObservableList<Student> masterData = FXCollections.observableArrayList();
@@ -49,6 +57,22 @@ public class StudentController{
 
         studentTable.setItems(filteredData);
 
+    }
+
+    @FXML public void goHome(ActionEvent event){
+        try{
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/HomeScreenView.fxml"));
+                Parent root = loader.load();
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setTitle("Home screen");
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                if( errorLabel != null )
+                    errorLabel.setText("Error: can not load home screen");
+                e.printStackTrace();
+            } 
     }
 
  /*   @FXML public void addStudent(){
