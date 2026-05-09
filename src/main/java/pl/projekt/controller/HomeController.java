@@ -48,6 +48,10 @@ public class HomeController{
         }
     }
     
+    /*public void initialize(){
+        startStopRecording();
+    }*/
+
     @FXML
     public void addStudent(ActionEvent event){
         loadScene(event, "/AddStudentView.fxml", "Add Student");

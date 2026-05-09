@@ -17,7 +17,7 @@ public class StudentRepository{
     }
 
     public boolean addStudent(Student student){
-        String request = "INSERT OR IGNORE INTO Students(firstName, lastName, albumNumber) Values(?,?,?,?);";
+        String request = "INSERT OR IGNORE INTO Students(firstName, lastName, albumNumber) Values(?,?,?);";
         
         try (Connection myConnection = DriverManager.getConnection(URL);
             PreparedStatement myStatement = myConnection.prepareStatement(request)){

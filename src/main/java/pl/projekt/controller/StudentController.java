@@ -1,6 +1,8 @@
 package pl.projekt.controller;
 
 import javafx.collections.FXCollections;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
@@ -29,6 +31,9 @@ public class StudentController{
     @FXML private TableColumn<Student, String> albumNumberCol;
 
     @FXML private TextField filterField;
+
+    @FXML private TextField albumNumberField;
+    @FXML private Label deleteLabel;
     //@FXML private Label status;
 
     private final StudentService service = new StudentService();
@@ -73,6 +78,20 @@ public class StudentController{
                     errorLabel.setText("Error: can not load home screen");
                 e.printStackTrace();
             } 
+    }
+
+    @FXML public void deleteStudent(){
+        String num = albumNumberField.getText().trim();
+        if (service.deleteStudent(num)){
+            deleteLabel.setText("Student " + num +  " deleted.");  
+            masterData.removeIf(s -> s.getAlbumNumber().equals(num));
+        } else {
+            deleteLabel.setText("Student " + num +  " does not exist.");
+        }
+        albumNumberField.clear();
+        PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
+        visiblePause.setOnFinished(ev -> deleteLabel.setText(""));
+        visiblePause.play();  
     }
 
  /*   @FXML public void addStudent(){

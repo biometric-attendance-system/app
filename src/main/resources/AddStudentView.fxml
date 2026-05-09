@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.projekt.controller.AddStudentController" spacing="40">
+<HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.projekt.controller.AddStudentController" spacing="40">
 
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
@@ -37,7 +37,7 @@
     </VBox>
 
     <VBox spacing="15">
-
+        <Label text="While recording, try to move your head slightly to capture different angles." alignment="CENTER"/>
         <ImageView fx:id="cameraView" fitWidth="500" fitHeight="350" preserveRatio="true"/>
 
         <Button text="Start / Stop Recording" onAction="#startStopRecording"/>

@@ -29,4 +29,12 @@
         </columns>
     </TableView>
     
+    <Separator/>
+
+    <HBox spacing="10" alignment="CENTER_LEFT"> 
+        <Label text="Delete Student:"/>
+        <TextField fx:id="albumNumberField" promptText="Type album number..." HBox.hgrow="ALWAYS"/>
+        <Button text="Delete" onAction="#deleteStudent"/>
+    </HBox>
+    <Label fx:id="deleteLabel"/>
 </VBox>
