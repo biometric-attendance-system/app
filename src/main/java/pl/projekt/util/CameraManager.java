@@ -1,6 +1,6 @@
 package pl.projekt.util;
 
-import pl.projekt.util.FaceDetector;
+
 
 import javafx.scene.image.Image;
 import org.opencv.core.Core;
@@ -9,11 +9,13 @@ import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 
+
 import java.io.ByteArrayInputStream;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+
 
 public class CameraManager {
 
@@ -36,24 +38,22 @@ public class CameraManager {
         this.cameraActive = false;
     }
 
-    public boolean openCamera(Consumer<Image> onFrameCaptured) {
+    public boolean openCamera(Consumer<Mat> onFrameCaptured) {
         if(!cameraActive){
             capture.open(0);
+            capture.set(org.opencv.videoio.Videoio.CAP_PROP_FRAME_WIDTH, 640);
+            capture.set(org.opencv.videoio.Videoio.CAP_PROP_FRAME_HEIGHT, 480);
+            
             if(capture.isOpened()){
                 cameraActive = true;
 
                 final Mat frame = new Mat();
-                final MatOfByte buffer = new MatOfByte();
 
                 Runnable frameGrabber = () -> {
                     if (!cameraActive || !capture.isOpened()) return;
 
                     if(capture.read(frame) && !frame.empty()){
-
-                        faceDetector.processFace(frame);
-                        Imgcodecs.imencode(".png", frame, buffer);
-                        Image imageToShow = new Image(new ByteArrayInputStream(buffer.toArray()));
-                        onFrameCaptured.accept(imageToShow);
+                        onFrameCaptured.accept(frame);
                     }
                 };
 
@@ -63,6 +63,14 @@ public class CameraManager {
             }
         }
         return false;
+    }
+
+    public Image convertMatToImage(Mat frame) {
+        MatOfByte buffer = new MatOfByte();
+        Imgcodecs.imencode(".bmp", frame, buffer);
+        Image img = new Image(new ByteArrayInputStream(buffer.toArray()));
+        buffer.release();
+        return img;
     }
 
     public boolean isCameraActive() {

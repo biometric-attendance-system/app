@@ -19,5 +19,8 @@
         <Label fx:id="errorLabel" alignment="center"/>
     </VBox>
 
+    <Separator orientation="VERTICAL" prefWidth="20"/>
+    
+
     <ImageView fx:id="cameraView" fitWidth="640" fitHeight="480" preserveRatio="true"/>
 </HBox>

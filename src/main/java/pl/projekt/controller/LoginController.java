@@ -1,5 +1,8 @@
 package pl.projekt.controller;
 
+import pl.projekt.util.FaceDetector;
+
+import javafx.scene.image.Image;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -7,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import org.opencv.core.Rect;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -35,6 +39,7 @@ public class LoginController{
 
     private final CameraManager cameraManager = new CameraManager();
     private final LecturerService lecturerService = new LecturerService();
+    private FaceDetector faceDetector = new FaceDetector();
 
     public void stopRecording(){
         if(cameraManager.isCameraActive()){
@@ -45,7 +50,10 @@ public class LoginController{
 
     public void initialize(){
         boolean started = cameraManager.openCamera(frame -> {
-            Platform.runLater(() -> cameraView.setImage(frame));
+            Rect[] faces = faceDetector.getRectFaces(frame);
+            faceDetector.drawFaces(frame, faces);
+            Image imageToShow = cameraManager.convertMatToImage(frame);
+            Platform.runLater(() -> cameraView.setImage(imageToShow));
         });
 
         if (!started) {

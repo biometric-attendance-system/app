@@ -1,5 +1,8 @@
 package pl.projekt.controller;
 
+import pl.projekt.util.FaceDetector;
+
+import javafx.scene.image.Image;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import pl.projekt.util.CameraManager;
+import org.opencv.core.Rect;
 
 import java.io.IOException;
 
@@ -22,6 +26,7 @@ public class HomeController{
     private Label errorLabel;
 
     private final CameraManager cameraManager = new CameraManager();
+    private FaceDetector faceDetector = new FaceDetector();
 
     @FXML
     public void startStopRecording(){
@@ -30,7 +35,10 @@ public class HomeController{
             cameraView.setImage(null);
         } else {
             boolean success = cameraManager.openCamera(frame -> {
-                Platform.runLater( () -> cameraView.setImage(frame)); 
+                Rect[] faces = faceDetector.getRectFaces(frame);
+                faceDetector.drawFaces(frame, faces);
+                Image imageToShow = cameraManager.convertMatToImage(frame);
+                Platform.runLater(() -> cameraView.setImage(imageToShow));
             });
 
             if (!success)

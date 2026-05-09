@@ -4,6 +4,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Rect;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
@@ -28,21 +29,25 @@ public class FaceDetector{
         
     }
 
-    public void processFace(Mat frame){    
+    public void drawFaces(Mat frame, Rect[] faces){
+        for (var face : faces){
+            Imgproc.rectangle(frame, face, new Scalar(102,255,178), 3);
+        }
+    }
+
+    public Rect[] getRectFaces(Mat frame){    
         Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY);
         Imgproc.equalizeHist(grayFrame, grayFrame);
 
         int minSize = Math.round(frame.rows() * 0.1f); 
-
         MatOfRect faces = new MatOfRect();
 
-        cascade.detectMultiScale(grayFrame, faces, 1.1, 3, 0, new Size(minSize, minSize), new Size() );
+        cascade.detectMultiScale(grayFrame, faces, 1.2, 3, 0, new Size(minSize, minSize), new Size() );
         
-        for (var face : faces.toArray()){
-            Imgproc.rectangle(frame, face, new Scalar(102,255,178), 3);
-        }
-        
+        Rect[] rectFaces = faces.toArray();
         faces.release();
+
+        return rectFaces;
     }
     
     public void clean() {
