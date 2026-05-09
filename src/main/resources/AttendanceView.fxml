@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="600.0" prefWidth="700.0" spacing="15.0" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.projekt.controller.AttendanceController">
+   <children>
+      <HBox alignment="CENTER_LEFT" spacing="20.0">
+         <children>
+            <Button onAction="#goHome" text="Home" />
+            <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Attendance History" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="infoLabel" textFill="#555555" />
+         </children>
+      </HBox>
+
+      <HBox spacing="15.0" alignment="CENTER_LEFT">
+         <children>
+            <Label text="Select Date:" />
+            <DatePicker fx:id="datePicker" prefWidth="150.0" />
+            <Separator orientation="VERTICAL" />
+            <Label text="Search:" />
+            <TextField fx:id="filterField" prefWidth="250.0" promptText="Name, album number or status (present/absent)..." />
+         </children>
+      </HBox>
+
+      <TableView fx:id="attendanceTable" VBox.vgrow="ALWAYS">
+        <columns>
+          <TableColumn fx:id="nameCol" prefWidth="250.0" text="Student Name" />
+          <TableColumn fx:id="albumCol" prefWidth="150.0" text="Album Number" />
+          <TableColumn fx:id="statusCol" prefWidth="150.0" text="Status" />
+        </columns>
+      </TableView>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>

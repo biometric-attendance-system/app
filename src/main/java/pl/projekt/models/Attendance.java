@@ -1,6 +1,5 @@
 package pl.projekt.models;
 
-
 public class Attendance{
     
     private final String albumNumber;

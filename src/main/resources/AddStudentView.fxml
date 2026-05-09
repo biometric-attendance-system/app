@@ -1,34 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox spacing="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="pl.projekt.controller.StudentController">
+<HBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.projekt.controller.AddStudentController" spacing="40">
+
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Search:"/>
-        <TextField fx:id="filterField" promptText="Type name, surname or album number..." HBox.hgrow="ALWAYS"/>
-    </HBox>
+    <VBox spacing="15">
 
-    <TableView fx:id="studentTable" VBox.vgrow="ALWAYS">
-        <columns>
-            <TableColumn fx:id="nameCol" text="first name" prefWidth="150"/>
-            <TableColumn fx:id="surNameCol" text="last name" prefWidth="150"/>
-            <TableColumn fx:id="albumNumberCol" text="album number" prefWidth="150"/>
-        </columns>
-    </TableView>
+        <Button text="Home" onAction="#goHome" prefWidth="120"/>
 
-    <Separator/>
-    <HBox spacing="10" alignment="CENTER">
-        <TextField fx:id="nameField" promptText="first name"/>
-        <TextField fx:id="surnameField" promptText="last name"/>
-        <TextField fx:id="albumNumberField" promptText="album number"/>
-        <Button text="Add Student" onAction="#addStudent" style="-fx-base: #60e999;"/>
-    </HBox>
-    <Label fx:id="status" text="" style="-fx-text-fill: red;"/>
-</VBox>
+        <Label fx:id="errorLabel"/>
+
+        <Label text="First name"/>
+        <TextField fx:id="name" promptText="Enter first name"/>
+
+        <Label text="Surname"/>
+        <TextField fx:id="surname" promptText="Enter last name"/>
+
+        <Label text="Album number"/>
+        <TextField fx:id="albumNumber" promptText="Enter album number"/>
+
+        <Button text="Save student"
+                onAction="#saveStudent"/>
+
+        <Label fx:id="fieldsErrorLabel"/>
+
+    </VBox>
+
+    <VBox spacing="15">
+
+        <ImageView fx:id="cameraView" fitWidth="500" fitHeight="350" preserveRatio="true"/>
+
+        <Button text="Start / Stop Recording" onAction="#startStopRecording"/>
+        <Label fx:id="cameraErrorLabel"/>
+
+    </VBox>
+
+</HBox>

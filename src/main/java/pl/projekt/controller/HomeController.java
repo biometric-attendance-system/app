@@ -42,7 +42,7 @@ public class HomeController{
             });
 
             if (!success)
-                errorLabel.setText("Błąd! Nie wykryto kamery.");
+                errorLabel.setText("Error: can not find camera.");
             else
                 errorLabel.setText("");
         }
@@ -82,11 +82,11 @@ public class HomeController{
             stage.show();
         } catch (IOException e) {
             if( errorLabel != null )
-                errorLabel.setText("Błąd! Nie można załadować " + fxmlPath);
+                errorLabel.setText("Error: can not load " + fxmlPath);
             e.printStackTrace();
         } catch (NullPointerException e){
             if( errorLabel != null )
-                errorLabel.setText("Błąd! Plik FXML nie istnieje.");
+                errorLabel.setText("Error: fxml file does not exist");
         }
     }
 

@@ -1,6 +1,5 @@
 package pl.projekt.service;
 import java.util.ArrayList;
-
 import pl.projekt.models.Attendance;
 import pl.projekt.repository.AttendanceRepository;
 
@@ -35,6 +34,10 @@ public class AttendanceService{
 
     public ArrayList<Attendance> getAttendances(){
         return repository.getAttendances();
+    }
+
+    public ArrayList<Attendance> getAttendanceByDate(String date){
+        return repository.getAttendanceByDate(date);
     }
 
     public int countAttendance(String albumNumber){

@@ -123,6 +123,29 @@ public class AttendanceRepository{
         return null;
     }
 
+    public ArrayList<Attendance> getAttendanceByDate(String date){
+        String request = "SELECT * FROM Attendance WHERE date=?;";
+
+        try (Connection myConnection = DriverManager.getConnection(URL);
+            PreparedStatement myStatement = myConnection.prepareStatement(request)){
+            
+            myStatement.setString(1, date);
+            ResultSet ans = myStatement.executeQuery();
+            ArrayList<Attendance> attendanceList = new ArrayList<>();
+
+            while (ans.next()){ 
+                attendanceList.add(new Attendance(ans.getString("albumNumber"), ans.getString("date"), ans.getString("status")));
+            }
+
+            return attendanceList;
+
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
+
     private void createTable() {
         try (Connection myConnection = DriverManager.getConnection(URL);
             Statement myStatement = myConnection.createStatement()) {
