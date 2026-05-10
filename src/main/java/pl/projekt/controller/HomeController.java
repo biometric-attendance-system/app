@@ -14,7 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import pl.projekt.util.CameraManager;
-import org.opencv.core.Rect;
+import org.bytedeco.opencv.opencv_core.Rect;
 
 import java.io.IOException;
 

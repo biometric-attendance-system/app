@@ -1,21 +1,23 @@
 package pl.projekt.util;
 
+import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.opencv.opencv_core.Mat;
+import org.bytedeco.opencv.opencv_videoio.VideoCapture;
 
+import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
+import static org.bytedeco.opencv.global.opencv_videoio.*;
 
 import javafx.scene.image.Image;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.videoio.VideoCapture;
-
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 
 import java.io.ByteArrayInputStream;
+import java.nio.ByteBuffer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-
 
 public class CameraManager {
 
@@ -26,7 +28,7 @@ public class CameraManager {
 
     static {
         try {
-            nu.pattern.OpenCV.loadShared();
+            Loader.load(org.bytedeco.opencv.opencv_java.class);
         } catch (UnsatisfiedLinkError e) {
             System.err.println("Error loading OpenCV: " + e.getMessage());
         }
@@ -66,11 +68,14 @@ public class CameraManager {
     }
 
     public Image convertMatToImage(Mat frame) {
-        MatOfByte buffer = new MatOfByte();
-        Imgcodecs.imencode(".bmp", frame, buffer);
-        Image img = new Image(new ByteArrayInputStream(buffer.toArray()));
-        buffer.release();
-        return img;
+        BytePointer buffer = new BytePointer();
+        imencode(".bmp", frame, buffer);
+            
+        byte[] bytes = new byte[(int)buffer.limit()];
+        buffer.get(bytes);
+        buffer.close();
+            
+        return new Image(new ByteArrayInputStream(bytes));
     }
 
     public boolean isCameraActive() {

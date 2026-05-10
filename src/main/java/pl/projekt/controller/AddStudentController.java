@@ -1,7 +1,7 @@
 package pl.projekt.controller;
 
-import org.opencv.core.Mat;
-import org.opencv.core.Rect;
+import org.bytedeco.opencv.opencv_core.Mat;
+import org.bytedeco.opencv.opencv_core.Rect;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +21,7 @@ import pl.projekt.models.Student;
 import pl.projekt.service.StudentService;
 import pl.projekt.util.CameraManager;
 import pl.projekt.util.FaceDetector;
+import pl.projekt.util.FaceRecognition;
 
 public class AddStudentController {
 
@@ -35,6 +36,11 @@ public class AddStudentController {
     private final CameraManager cameraManager = new CameraManager();
     private final StudentService studentService = new StudentService();
     private final FaceDetector faceDetector = new FaceDetector();
+    private final FaceRecognition faceRecognition = new FaceRecognition();
+
+    private long lastSaveTime = 0;
+    private final long intervalsTime = 1000;
+    boolean done = false;
 
     @FXML 
     public void startStopRecording() {
@@ -52,32 +58,55 @@ public class AddStudentController {
                 cameraErrorLabel.setText("Error opening camera");
             else 
                 cameraErrorLabel.setText("Recording...");
-            
         } else {
             fieldsErrorLabel.setText("All fields are required!");
         }
     }
 
     private boolean startRecording(){
+        if (!faceRecognition.createDir(albumNumber.getText())){
+            return false;
+        }
         return cameraManager.openCamera(frame -> {
             Rect[] faces = faceDetector.getRectFaces(frame);
             faceDetector.drawFaces(frame, faces);
+
+            long currTime = System.currentTimeMillis();
+            if (currTime - lastSaveTime >= intervalsTime){
+                faceRecognition.saveFace(frame, faces);
+                lastSaveTime = currTime;
+
+                int photoCount = faceRecognition.getPhotoCount();
+                Platform.runLater(() -> 
+                cameraErrorLabel.setText("Photos: " + photoCount + "/30")
+            );
+            }
+
             Image imageToShow = cameraManager.convertMatToImage(frame);
             Platform.runLater(() -> cameraView.setImage(imageToShow));
         });
     }
 
     private void stopRecording() {
+        boolean flag = faceRecognition.trainFace();
         cameraManager.closeCamera();
         Platform.runLater(() -> {
             cameraView.setImage(null);
-            cameraErrorLabel.setText("Camera is off.");
+            if (flag) {
+                cameraErrorLabel.setText("Camera off. Face model updated");
+                done = true;
+            } else {
+                cameraErrorLabel.setText("Camera off. Error: Not enough photos");
+            }
         });
     }
 
     @FXML
     public void saveStudent() {
         if (!validateFields()) {
+            return;
+        } else if (!done){
+            fieldsErrorLabel.setText("Record first!");
             return;
         }
 
@@ -88,7 +117,7 @@ public class AddStudentController {
                 cameraErrorLabel.setText("Student added successfully!");
                 clearFields();
             } else {
-                cameraErrorLabel.setText("Error adding student.");
+                cameraErrorLabel.setText("Error adding student, chceck if student already exists.");
             }
         } catch (Exception e) {
             cameraErrorLabel.setText("Error: " + e.getMessage());

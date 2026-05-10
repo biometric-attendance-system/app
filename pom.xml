@@ -32,9 +32,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.openpnp</groupId>
-            <artifactId>opencv</artifactId>
-            <version>4.7.0-0</version>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>opencv-platform</artifactId>
+            <version>4.7.0-1.5.9</version>
         </dependency>
 
         <dependency>

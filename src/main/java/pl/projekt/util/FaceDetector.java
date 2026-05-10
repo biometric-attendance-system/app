@@ -1,15 +1,15 @@
 package pl.projekt.util;
 
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfRect;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
-import org.opencv.core.Rect;
-import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
-import org.opencv.objdetect.CascadeClassifier;
-import java.lang.Math;
+import org.bytedeco.opencv.opencv_core.Mat;
+import org.bytedeco.opencv.opencv_core.Rect;
+import org.bytedeco.opencv.opencv_core.RectVector;  
+import org.bytedeco.opencv.opencv_core.Scalar;
+import org.bytedeco.opencv.opencv_core.Size;
+import org.bytedeco.opencv.opencv_objdetect.CascadeClassifier;
 
+import static org.bytedeco.opencv.global.opencv_imgproc.*;
+
+import java.lang.Math;
 
 public class FaceDetector{
 
@@ -29,28 +29,35 @@ public class FaceDetector{
         
     }
 
+
     public void drawFaces(Mat frame, Rect[] faces){
         for (var face : faces){
-            Imgproc.rectangle(frame, face, new Scalar(102,255,178), 3);
+            rectangle(frame, face, new Scalar(102, 255, 178, 0), 3, LINE_8, 0);
         }
     }
 
+
     public Rect[] getRectFaces(Mat frame){    
-        Imgproc.cvtColor(frame, grayFrame, Imgproc.COLOR_BGR2GRAY);
-        Imgproc.equalizeHist(grayFrame, grayFrame);
+        cvtColor(frame, grayFrame, COLOR_BGR2GRAY);
+        equalizeHist(grayFrame, grayFrame);
 
         int minSize = Math.round(frame.rows() * 0.1f); 
-        MatOfRect faces = new MatOfRect();
+        RectVector faces = new RectVector();
 
-        cascade.detectMultiScale(grayFrame, faces, 1.2, 3, 0, new Size(minSize, minSize), new Size() );
+        cascade.detectMultiScale(grayFrame, faces, 1.2, 3, 0, 
+            new Size(minSize, minSize), new Size());
         
-        Rect[] rectFaces = faces.toArray();
-        faces.release();
-
+        Rect[] rectFaces = new Rect[(int)faces.size()];
+        for (int i = 0; i < faces.size(); i++) {
+            rectFaces[i] = faces.get(i);
+        }
+        
+        faces.close();  
         return rectFaces;
     }
     
     public void clean() {
-        if (grayFrame != null) grayFrame.release();
+        if (grayFrame != null) grayFrame.close();
+        if (cascade != null) cascade.close();
     }
 }

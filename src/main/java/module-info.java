@@ -3,7 +3,7 @@ module pl.projekt {
     requires javafx.fxml;
     requires java.sql;
     requires jbcrypt;
-    requires opencv;
+    requires org.bytedeco.opencv;
     exports pl.projekt;
     opens pl.projekt.controller to javafx.fxml;
 }
