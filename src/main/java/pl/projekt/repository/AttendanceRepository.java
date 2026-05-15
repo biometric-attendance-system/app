@@ -60,6 +60,8 @@ public class AttendanceRepository{
                 myStatement.setString(2, attendance.getDate());
                 myStatement.setString(3, attendance.getStatus());
 
+                myStatement.executeUpdate();
+                
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

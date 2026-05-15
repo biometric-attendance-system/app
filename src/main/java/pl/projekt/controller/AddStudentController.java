@@ -39,7 +39,7 @@ public class AddStudentController {
     private final FaceRecognition faceRecognition = new FaceRecognition();
 
     private long lastSaveTime = 0;
-    private final long intervalsTime = 1000;
+    private final long intervalsTime = 500;
     boolean done = false;
 
     @FXML 
@@ -78,7 +78,7 @@ public class AddStudentController {
 
                 int photoCount = faceRecognition.getPhotoCount();
                 Platform.runLater(() -> 
-                cameraErrorLabel.setText("Photos: " + photoCount + "/30")
+                cameraErrorLabel.setText("Photos: " + photoCount + "/60")
             );
             }
 

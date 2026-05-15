@@ -15,6 +15,15 @@ public class AttendanceService{
         this.repository = repository;
     }
 
+    public void addAttendances(String[] albumNumbers, String date, String status){
+        for (String albumNumber : albumNumbers){
+            if (albumNumber.equals("Unknown")) continue;
+            if (addAttendance(new Attendance(albumNumber,date,status))){
+                System.out.println("Added student: " + albumNumber);
+            } 
+        }
+    }
+
     public boolean addAttendance(Attendance attendance){
         String status = repository.getStatus(attendance.getAlbumNumber(), attendance.getDate());
         if ("present".equals(status)){

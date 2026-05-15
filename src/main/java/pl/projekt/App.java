@@ -48,16 +48,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        LecturerService l = new LecturerService();
-        l.addLecturer(new Lecturer("1","Rysiek","bla","mojpin"));
-        AttendanceService a = new AttendanceService();
-        a.addAttendance(new Attendance("123456", "5/9/2026", "present"));
-        StudentService s = new StudentService();
-        s.addStudent(new Student("Jakis", "Student", "686868"));
-        s.addStudent(new Student("Kolejny", "Stud", "987654"));
         launch();
-        
-       
     }
 
 }

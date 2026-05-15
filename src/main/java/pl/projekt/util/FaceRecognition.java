@@ -4,6 +4,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.nio.IntBuffer;
+import org.bytedeco.javacpp.IntPointer;
+import org.bytedeco.javacpp.DoublePointer;
 
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.MatVector; 
@@ -20,9 +22,12 @@ public class FaceRecognition{
     private final String APP_DIR_PATH = System.getProperty("user.home") + File.separator + ".FaceRecognitionApp";
     private final String MODEL_FILE_PATH = APP_DIR_PATH + File.separator + "trained_model.yml";
 
+
+    private FaceRecognizer faceRecognizer;
     private Path tempDir;
     private String albumNumber;
     private int count;
+    private double CONFIDENCE = 40.0;
 
     private File getTrainFile(){
         File trainDir = new File(APP_DIR_PATH);
@@ -30,6 +35,64 @@ public class FaceRecognition{
             trainDir.mkdirs();
         } 
         return new File(MODEL_FILE_PATH);
+    }
+
+    public boolean loadRecognizer(){
+        faceRecognizer = LBPHFaceRecognizer.create();
+        File trainFile = getTrainFile();
+    
+        if (trainFile.exists()) {
+            faceRecognizer.read(trainFile.getAbsolutePath());
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    public void closeRecognizer(){
+        faceRecognizer.close();
+    }
+
+    public String[] recognize(Mat faces, Rect[] pos){
+        String[] temp = new String[pos.length];
+
+        try(IntPointer label = new IntPointer(1);
+            DoublePointer confidence = new DoublePointer(1);
+            ){
+            int i = 0;
+            for (Rect curr : pos){
+
+                int x = Math.max(0, curr.x());
+                int y = Math.max(0, curr.y());
+                int width = Math.min(faces.cols() - x, curr.width());
+                int height = Math.min(faces.rows() - y, curr.height());
+
+                if (width <= 0 || height <= 0) {
+                    temp[i++] = "Unknown"; 
+                    continue;
+                }
+
+                Rect safeRect = new Rect(x, y, width, height);
+
+                Mat cropped = new Mat(faces,safeRect);
+                Mat grayCropped = new Mat();
+                cvtColor(cropped, grayCropped, COLOR_BGR2GRAY);
+                equalizeHist(grayCropped, grayCropped);
+                
+                faceRecognizer.predict(grayCropped, label, confidence);
+
+                if (confidence.get(0) <= CONFIDENCE){
+                    temp[i] = String.valueOf(label.get(0));
+                } else {
+                    temp[i] = "Unknown";
+                }
+
+                grayCropped.close();
+                cropped.close();
+                i++;
+            }
+        }
+        return temp;
     }
 
     public boolean createDir(String albumNumber){
@@ -85,7 +148,7 @@ public class FaceRecognition{
     } 
 
     public boolean trainFace(){
-        if (count < 30) return false;
+        if (count < 60) return false;
         if (tempDir == null) return false;
 
         File[] files = tempDir.toFile().listFiles();
@@ -104,13 +167,11 @@ public class FaceRecognition{
             idx++;
         }
 
-        FaceRecognizer faceRecognizer = LBPHFaceRecognizer.create();
+        loadRecognizer();
 
         try{
             File trainFile = getTrainFile();
-
             if (trainFile.exists()){
-                faceRecognizer.read(trainFile.getAbsolutePath());
                 faceRecognizer.update(images, labelsMat);  
             } else {
                 faceRecognizer.train(images, labelsMat);
@@ -126,11 +187,11 @@ public class FaceRecognition{
             
         } finally {
             if (labelsMat != null) labelsMat.close();
-            if (faceRecognizer != null) faceRecognizer.close();
+            if (faceRecognizer != null) closeRecognizer();
             
             this.deleteDir();
 
-            for (long i = 0; i < images.size(); i++){
+            for (int i = 0; i < images.size(); i++){
                 Mat img = images.get(i);
                 if (img != null && !img.isNull()) {
                     img.close();

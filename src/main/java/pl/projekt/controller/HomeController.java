@@ -1,6 +1,8 @@
 package pl.projekt.controller;
 
 import pl.projekt.util.FaceDetector;
+import pl.projekt.service.AttendanceService;
+import pl.projekt.models.Attendance;
 
 import javafx.scene.image.Image;
 import javafx.application.Platform;
@@ -14,7 +16,9 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import pl.projekt.util.CameraManager;
+import pl.projekt.util.FaceRecognition;
 import org.bytedeco.opencv.opencv_core.Rect;
+import java.time.LocalDateTime;
 
 import java.io.IOException;
 
@@ -26,20 +30,41 @@ public class HomeController{
     private Label errorLabel;
 
     private final CameraManager cameraManager = new CameraManager();
-    private FaceDetector faceDetector = new FaceDetector();
+    private final FaceDetector faceDetector = new FaceDetector();
+    private final FaceRecognition faceRecognition = new FaceRecognition();
+    private final AttendanceService attendanceService = new AttendanceService();
 
     @FXML
     public void startStopRecording(){
+        String dateTime = LocalDateTime.now().toString();
+        
         if(cameraManager.isCameraActive()){
             cameraManager.closeCamera();
             cameraView.setImage(null);
         } else {
-            boolean success = cameraManager.openCamera(frame -> {
-                Rect[] faces = faceDetector.getRectFaces(frame);
-                faceDetector.drawFaces(frame, faces);
-                Image imageToShow = cameraManager.convertMatToImage(frame);
-                Platform.runLater(() -> cameraView.setImage(imageToShow));
-            });
+            boolean success;
+            if (faceRecognition.loadRecognizer()){
+                success = cameraManager.openCamera(frame -> {
+                    try {
+                        Rect[] faces = faceDetector.getRectFaces(frame);
+                        String[] labels = faceRecognition.recognize(frame, faces);
+                        faceDetector.drawFaces(frame, faces, labels);
+                        Image imageToShow = cameraManager.convertMatToImage(frame);
+                        attendanceService.addAttendances(labels, dateTime, "present");
+                        Platform.runLater(() -> cameraView.setImage(imageToShow));
+                    
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+            } else {
+                success = cameraManager.openCamera(frame -> {
+                    Rect[] faces = faceDetector.getRectFaces(frame);
+                    faceDetector.drawFaces(frame, faces);
+                    Image imageToShow = cameraManager.convertMatToImage(frame);
+                    Platform.runLater(() -> cameraView.setImage(imageToShow));
+                });
+            }
 
             if (!success)
                 errorLabel.setText("Error: can not find camera.");
@@ -47,10 +72,6 @@ public class HomeController{
                 errorLabel.setText("");
         }
     }
-    
-    /*public void initialize(){
-        startStopRecording();
-    }*/
 
     @FXML
     public void addStudent(ActionEvent event){
