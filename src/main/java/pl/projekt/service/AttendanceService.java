@@ -2,22 +2,18 @@ package pl.projekt.service;
 import java.util.ArrayList;
 import pl.projekt.models.Attendance;
 import pl.projekt.repository.AttendanceRepository;
+import pl.projekt.models.Student;
+import pl.projekt.service.StudentService;
 
 public class AttendanceService{
     
-    private final AttendanceRepository repository;
-
-    public AttendanceService(){
-        repository = new AttendanceRepository();
-    }
-
-    public AttendanceService(AttendanceRepository repository){
-        this.repository = repository;
-    }
+    private final AttendanceRepository repository = new AttendanceRepository();
+    private final StudentService studentService = new StudentService();
 
     public void addAttendances(String[] albumNumbers, String date, String status){
         for (String albumNumber : albumNumbers){
             if (albumNumber.equals("Unknown")) continue;
+            if (studentService.getStudent(albumNumber) == null) continue;
             if (addAttendance(new Attendance(albumNumber,date,status))){
                 System.out.println("Added student: " + albumNumber);
             } 

@@ -45,17 +45,12 @@ public class HomeController{
             boolean success;
             if (faceRecognition.loadRecognizer()){
                 success = cameraManager.openCamera(frame -> {
-                    try {
-                        Rect[] faces = faceDetector.getRectFaces(frame);
-                        String[] labels = faceRecognition.recognize(frame, faces);
-                        faceDetector.drawFaces(frame, faces, labels);
-                        Image imageToShow = cameraManager.convertMatToImage(frame);
-                        attendanceService.addAttendances(labels, dateTime, "present");
-                        Platform.runLater(() -> cameraView.setImage(imageToShow));
-                    
-                    } catch (Throwable t) {
-                        t.printStackTrace();
-                    }
+                    Rect[] faces = faceDetector.getRectFaces(frame);
+                    String[] labels = faceRecognition.recognize(frame, faces);
+                    faceDetector.drawFaces(frame, faces, labels);
+                    Image imageToShow = cameraManager.convertMatToImage(frame);
+                    attendanceService.addAttendances(labels, dateTime, "present");
+                    Platform.runLater(() -> cameraView.setImage(imageToShow));
                 });
             } else {
                 success = cameraManager.openCamera(frame -> {

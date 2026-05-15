@@ -89,7 +89,7 @@ public class CameraManager {
             if(timer != null && !timer.isShutdown()){
                 try{
                     timer.shutdown();
-                    if (!timer.awaitTermination(200, TimeUnit.MILLISECONDS)){
+                    if (!timer.awaitTermination(300, TimeUnit.MILLISECONDS)){
                         timer.shutdownNow();
                     }
 

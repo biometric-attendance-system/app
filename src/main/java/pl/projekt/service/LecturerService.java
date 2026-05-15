@@ -5,18 +5,9 @@ import pl.projekt.repository.LecturerRepository;
 public class LecturerService{
     
     private final LecturerRepository repository = new LecturerRepository();
-
-    public boolean deleteLecturer(String ID){
-        return repository.deleteLecturer(ID);
-    }
-
-    public String getHashedPin(String ID){
-        Lecturer lecturer = repository.getLecturer(ID);
-        if (lecturer != null) {
-            return lecturer.getPinHash();
-        }
-        
-        return null;
+    
+    public boolean isEmpty(){
+        return repository.isEmpty();
     }
 
     public boolean addLecturer(Lecturer lecturer){
@@ -25,8 +16,8 @@ public class LecturerService{
         return repository.addLecturer(lecturer);
     }
 
-    public Lecturer getLecturer(String ID){
-        return repository.getLecturer(ID);
+    public Lecturer getLecturer(){
+        return repository.getLecturer();
     }
 
     public boolean setLecturer(Lecturer lecturer){

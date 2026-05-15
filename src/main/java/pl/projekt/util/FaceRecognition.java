@@ -38,7 +38,9 @@ public class FaceRecognition{
     }
 
     public boolean loadRecognizer(){
-        faceRecognizer = LBPHFaceRecognizer.create();
+        if (faceRecognizer == null) {
+            faceRecognizer = LBPHFaceRecognizer.create();
+        }
         File trainFile = getTrainFile();
     
         if (trainFile.exists()) {
@@ -55,6 +57,16 @@ public class FaceRecognition{
 
     public String[] recognize(Mat faces, Rect[] pos){
         String[] temp = new String[pos.length];
+
+        if (faceRecognizer == null) {
+            boolean isLoaded = loadRecognizer();
+            if (!isLoaded) {
+                for (int i = 0; i < temp.length; i++) {
+                    temp[i] = "Unknown";
+                }
+                return temp; 
+            }
+        }
 
         try(IntPointer label = new IntPointer(1);
             DoublePointer confidence = new DoublePointer(1);

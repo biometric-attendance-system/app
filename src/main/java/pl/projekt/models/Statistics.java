@@ -5,9 +5,9 @@ public class Statistics{
     private final String albumNumber;
     private final String firstName;
     private final String lastName;
-    private final Integer present;
-    private final Integer all;
-    private final Double mean;
+    private final int present;
+    private final int all;
+    private final double mean;
 
     public Statistics(String albumNumber, String firstName, String lastName, int present, int all, double mean){
         this.albumNumber = albumNumber;

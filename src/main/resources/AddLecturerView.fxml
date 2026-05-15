@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.projekt.controller.AddLecturerController" spacing="10">
+    <HBox spacing="40">
+
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <VBox spacing="15">
+
+            <Label text = "Register before using the App" />
+
+            <Label fx:id="errorLabel"/>
+
+            <Label text="First name"/>
+            <TextField fx:id="name" promptText="Enter first name"/>
+
+            <Label text="Surname"/>
+            <TextField fx:id="surname" promptText="Enter last name"/>
+
+            <Label text="ID number"/>
+            <TextField fx:id="IDnumber" promptText="Enter ID number"/>
+
+            <Label text="Password"/>
+            <PasswordField fx:id="psswd" promptText="Enter password"/>
+
+            <Label text="Confirm password"/>
+            <PasswordField fx:id="confirmPsswd" promptText="Confirm password"/>
+
+            <Button text="Save info"
+                    onAction="#saveLecturer"/>
+
+            <Label fx:id="fieldsErrorLabel"/>
+
+        </VBox>
+
+        <VBox spacing="15">
+            <Label text="While recording, try to move your head slightly to capture different angles." alignment="CENTER"/>
+            <ImageView fx:id="cameraView" fitWidth="500" fitHeight="350" preserveRatio="true"/>
+
+            <Button text="Start / Stop Recording" onAction="#startStopRecording"/>
+            <Label fx:id="cameraErrorLabel"/>
+        </VBox>
+    </HBox>
+    
+    <Label text="Make sure the password is 8 characters long and contains: at least 1 number, special character and capitalized letter!" alignment="CENTER"/>
+    <padding>
+            <Insets top="0" right="0" bottom="20" left="0"/>
+    </padding>
+
+</VBox>

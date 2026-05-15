@@ -52,13 +52,11 @@ public class LecturerRepository{
         return false;
     }
 
-    public Lecturer getLecturer(String ID){
-        String request = "SELECT * FROM Lecturers WHERE ID=?;";
+    public Lecturer getLecturer(){
+        String request = "SELECT * FROM Lecturers;";
 
         try (Connection myConnection = DriverManager.getConnection(URL);
             PreparedStatement myStatement = myConnection.prepareStatement(request)){
-            
-            myStatement.setString(1, ID);
 
             ResultSet ans = myStatement.executeQuery();
             
@@ -71,6 +69,21 @@ public class LecturerRepository{
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    public boolean isEmpty(){
+        String request = "SELECT 1 FROM Lecturers;";
+
+        try (Connection myConnection = DriverManager.getConnection(URL);
+            PreparedStatement myStatement = myConnection.prepareStatement(request)){
+            
+            ResultSet ans = myStatement.executeQuery();
+            
+            return !ans.next(); 
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return false;
     }
 
     public boolean setLecturer(Lecturer lecturer){
