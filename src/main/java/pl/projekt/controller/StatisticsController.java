@@ -48,7 +48,7 @@ public class StatisticsController {
 
         setupFilter();
         loadStatisticsData();
-        
+
     }
 
     private void loadStatisticsData() {
@@ -61,7 +61,7 @@ public class StatisticsController {
         }
 
         masterData.addAll(statsList);
-        infoLabel.setText("Global statistics loaded successfully.");
+        infoLabel.setText("Statistics loaded successfully.");
     }
 
     private void setupFilter() {

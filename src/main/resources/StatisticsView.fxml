@@ -18,8 +18,8 @@
         
         <HBox alignment="CENTER_LEFT" spacing="20.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#goHome" text="← Back" />
-                <Label text="Global Attendance Statistics">
+                <Button mnemonicParsing="false" onAction="#goHome" text="Home" />
+                <Label text="Statistics">
                     <font>
                         <Font name="System Bold" size="18.0" />
                     </font>
@@ -37,7 +37,7 @@
         <TableView fx:id="statsTable" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="albumCol" prefWidth="120.0" text="Album Number" />
-                <TableColumn fx:id="nameCol" prefWidth="200.0" text="Student Name" />
+                <TableColumn fx:id="nameCol" prefWidth="200.0" text="Name" />
                 <TableColumn fx:id="presentCol" prefWidth="100.0" text="Present" />
                 <TableColumn fx:id="allCol" prefWidth="100.0" text="Total Classes" />
                 <TableColumn fx:id="percentCol" prefWidth="120.0" text="Attendance %" />
