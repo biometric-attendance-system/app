@@ -51,14 +51,19 @@ public class AttendanceRepository{
     }
 
     public void addAttendance(Attendance attendance){
-        String request = "INSERT INTO Attendance(albumNumber, date, status) Values(?,?,?);";
+        String request = "INSERT INTO Attendance(albumNumber, date, time, status) SELECT ?, ?, ?, ? " + 
+                            "WHERE NOT EXISTS (SELECT 1 FROM Attendance WHERE albumNumber = ? AND date = ?);";
 
         try (Connection myConnection = DriverManager.getConnection(URL);
              PreparedStatement myStatement = myConnection.prepareStatement(request)) {
 
                 myStatement.setString(1, attendance.getAlbumNumber());
                 myStatement.setString(2, attendance.getDate());
-                myStatement.setString(3, attendance.getStatus());
+                myStatement.setString(3, attendance.getTime());
+                myStatement.setString(4, attendance.getStatus());
+
+                myStatement.setString(5, attendance.getAlbumNumber());
+                myStatement.setString(6, attendance.getDate());
 
                 myStatement.executeUpdate();
                 
@@ -68,14 +73,15 @@ public class AttendanceRepository{
     }
 
     public void setStatus(Attendance attendance){
-        String request = "UPDATE Attendance SET status=? WHERE albumNumber=? AND date=?;";
+        String request = "UPDATE Attendance SET status=?, time=? WHERE albumNumber=? AND date=?;";
         
         try (Connection myConnection = DriverManager.getConnection(URL);
             PreparedStatement myStatement = myConnection.prepareStatement(request)){
             
             myStatement.setString(1, attendance.getStatus());
-            myStatement.setString(2, attendance.getAlbumNumber());
-            myStatement.setString(3, attendance.getDate());
+            myStatement.setString(2, attendance.getTime());
+            myStatement.setString(3, attendance.getAlbumNumber());
+            myStatement.setString(4, attendance.getDate());
             
             myStatement.execute();
 
@@ -113,7 +119,7 @@ public class AttendanceRepository{
             ArrayList<Attendance> attendanceList = new ArrayList<>();
 
             while (ans.next()){ 
-                attendanceList.add(new Attendance(ans.getString("albumNumber"), ans.getString("date"), ans.getString("status")));
+                attendanceList.add(new Attendance(ans.getString("albumNumber"), ans.getString("date"), ans.getString("time"), ans.getString("status")));
             }
 
             return attendanceList;
@@ -136,7 +142,7 @@ public class AttendanceRepository{
             ArrayList<Attendance> attendanceList = new ArrayList<>();
 
             while (ans.next()){ 
-                attendanceList.add(new Attendance(ans.getString("albumNumber"), ans.getString("date"), ans.getString("status")));
+                attendanceList.add(new Attendance(ans.getString("albumNumber"), ans.getString("date"), ans.getString("time"), ans.getString("status")));
             }
 
             return attendanceList;
@@ -151,7 +157,7 @@ public class AttendanceRepository{
     private void createTable() {
         try (Connection myConnection = DriverManager.getConnection(URL);
             Statement myStatement = myConnection.createStatement()) {
-            String request = "CREATE TABLE IF NOT EXISTS Attendance(albumNumber TEXT, date TEXT, status TEXT); ";
+            String request = "CREATE TABLE IF NOT EXISTS Attendance(albumNumber TEXT, date TEXT, time TEXT, status TEXT); ";
             
             myStatement.execute(request);
             

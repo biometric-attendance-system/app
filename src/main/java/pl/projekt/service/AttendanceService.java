@@ -10,11 +10,11 @@ public class AttendanceService{
     private final AttendanceRepository repository = new AttendanceRepository();
     private final StudentService studentService = new StudentService();
 
-    public void addAttendances(String[] albumNumbers, String date, String status){
+    public void addAttendances(String[] albumNumbers, String date, String time, String status){
         for (String albumNumber : albumNumbers){
             if (albumNumber.equals("Unknown")) continue;
             if (studentService.getStudent(albumNumber) == null) continue;
-            if (addAttendance(new Attendance(albumNumber,date,status))){
+            if (addAttendance(new Attendance(albumNumber,date,time,status))){
                 System.out.println("Added student: " + albumNumber);
             } 
         }
@@ -27,10 +27,12 @@ public class AttendanceService{
         }
         else if ("absent".equals(status)) {
             repository.setStatus(attendance);
+            System.out.println("Changed status: " + attendance.getAlbumNumber());
             return true;
         }
         else if (status == null){
             repository.addAttendance(attendance);
+            System.out.println("Added student: " + attendance.getAlbumNumber());
             return true;
         }
         
