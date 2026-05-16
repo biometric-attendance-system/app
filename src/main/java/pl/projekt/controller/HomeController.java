@@ -18,7 +18,11 @@ import javafx.stage.Stage;
 import pl.projekt.util.CameraManager;
 import pl.projekt.util.FaceRecognition;
 import org.bytedeco.opencv.opencv_core.Rect;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
 
 import java.io.IOException;
 
@@ -33,23 +37,39 @@ public class HomeController{
     private final FaceDetector faceDetector = new FaceDetector();
     private final FaceRecognition faceRecognition = new FaceRecognition();
     private final AttendanceService attendanceService = new AttendanceService();
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+    private final Set<String> markedPresent = new HashSet<>();
 
     @FXML
     public void startStopRecording(){
-        String dateTime = LocalDateTime.now().toString();
+        String date = LocalDate.now().toString();
         
         if(cameraManager.isCameraActive()){
             cameraManager.closeCamera();
             cameraView.setImage(null);
         } else {
+            markedPresent.clear();
             boolean success;
+
             if (faceRecognition.loadRecognizer()){
                 success = cameraManager.openCamera(frame -> {
                     Rect[] faces = faceDetector.getRectFaces(frame);
                     String[] labels = faceRecognition.recognize(frame, faces);
+
                     faceDetector.drawFaces(frame, faces, labels);
+
+                    String time = LocalTime.now().format(formatter);
+                    
+                    if (labels != null) {
+                        for (String label : labels) {
+                            if (!label.equals("Unknown") && !markedPresent.contains(label) && label.length()==6) {
+                                attendanceService.addAttendance(new Attendance(label, date, time, "present"));
+                                markedPresent.add(label);
+                            }
+                        }
+                    }
+
                     Image imageToShow = cameraManager.convertMatToImage(frame);
-                    attendanceService.addAttendances(labels, dateTime, "present");
                     Platform.runLater(() -> cameraView.setImage(imageToShow));
                 });
             } else {
