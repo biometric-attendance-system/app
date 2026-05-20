@@ -20,6 +20,28 @@ public class AttendanceService{
         }
     }
 
+    public void fillAbsentByDate(String date, String time){
+        ArrayList<Attendance> att = getAttendanceByDate(date);
+        ArrayList<Student> std = studentService.getStudents();
+        boolean flag;
+
+        if (std == null) return;
+
+        if (att == null){
+            for (var stud : std){
+                addAttendance(new Attendance(stud.getAlbumNumber(), date, time, "absent"));
+            }
+        } else {
+            for (var stud : std){
+                flag = true;
+                for (var attendance : att){
+                    if (stud.getAlbumNumber().equals(attendance.getAlbumNumber())) flag = false;
+                }
+                if (flag) addAttendance(new Attendance(stud.getAlbumNumber(), date, time, "absent"));
+            }
+        }
+    }
+
     public boolean addAttendance(Attendance attendance){
         String status = repository.getStatus(attendance.getAlbumNumber(), attendance.getDate());
         if ("present".equals(status)){

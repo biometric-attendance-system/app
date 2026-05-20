@@ -19,6 +19,7 @@ import pl.projekt.service.AttendanceService;
 import pl.projekt.service.StudentService;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +31,7 @@ public class AttendanceController {
     @FXML private TableColumn<AttendanceRecord, String> albumCol;
     @FXML private TableColumn<AttendanceRecord, String> nameCol;
     @FXML private TableColumn<AttendanceRecord, String> statusCol;
+    @FXML private TableColumn<AttendanceRecord, String> timeCol;
     @FXML private DatePicker datePicker;
     @FXML private TextField filterField;
 
@@ -42,15 +44,18 @@ public class AttendanceController {
         private final String album;
         private final String name;
         private final String status;
+        private final String time;
 
-        public AttendanceRecord(String album, String name, String status) {
+        public AttendanceRecord(String album, String name, String status, String time) {
             this.album = album;
             this.name = name;
             this.status = status;
+            this.time = time;
         }
         public String getAlbum() { return album; }
         public String getName() { return name; }
         public String getStatus() { return status; }
+        public String getTime() { return time; }
     }
 
     @FXML public void initialize() {
@@ -59,6 +64,7 @@ public class AttendanceController {
         albumCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAlbum()));
         nameCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         statusCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStatus()));
+        timeCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getTime()));
 
         setupFilter();
         loadDataByDate(datePicker.getValue());
@@ -84,11 +90,18 @@ public class AttendanceController {
                     .map(Attendance::getStatus)
                     .findFirst()
                     .orElse("no record");
+
+            String time = attendances.stream()
+                    .filter(a -> a.getAlbumNumber().equals(s.getAlbumNumber()))
+                    .map(Attendance::getTime)
+                    .findFirst()
+                    .orElse("no record");
             
             masterData.add(new AttendanceRecord(
                 s.getAlbumNumber(), 
                 s.getFirstName() + " " + s.getLastName(), 
-                status
+                status,
+                time
             ));
         }
         infoLabel.setText("Data loaded for " + date.toString());

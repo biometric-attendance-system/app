@@ -30,6 +30,7 @@
           <TableColumn fx:id="nameCol" prefWidth="250.0" text="Student Name" />
           <TableColumn fx:id="albumCol" prefWidth="150.0" text="Album Number" />
           <TableColumn fx:id="statusCol" prefWidth="150.0" text="Status" />
+          <TableColumn fx:id="timeCol" prefWidth="150.0" text="Time" />
         </columns>
       </TableView>
    </children>

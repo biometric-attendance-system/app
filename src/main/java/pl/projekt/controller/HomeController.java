@@ -47,6 +47,7 @@ public class HomeController{
         if(cameraManager.isCameraActive()){
             cameraManager.closeCamera();
             cameraView.setImage(null);
+            attendanceService.fillAbsentByDate(LocalDate.now().toString() , LocalTime.now().format(formatter));
         } else {
             markedPresent.clear();
             boolean success;
