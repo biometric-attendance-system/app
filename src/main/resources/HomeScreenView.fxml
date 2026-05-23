@@ -3,20 +3,22 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.ImageView?>
 
-
-<HBox spacing ="30.0" alignment="TOP_CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="pl.projekt.controller.HomeController">
-    <VBox spacing="10.0" alignment="TOP_LEFT" >
-
-        <Button text = "Add student" onAction="#addStudent"/>
-        <Button text = "Show statistics" onAction="#showStatistics"/>
-        <Button text = "Show students" onAction="#showStudents"/>
-        <Button text = "Show attendance" onAction="#showAttendance"/>
-        
+<HBox spacing="30.0" alignment="TOP_CENTER" styleClass="main-container" stylesheets="@CameraView.css" xmlns:fx="http://javafx.com/fxml" fx:controller="pl.projekt.controller.HomeController">
+    
+    <VBox spacing="15.0" alignment="TOP_CENTER" styleClass="sidebar">
+        <Label text="MENU" styleClass="sidebar-title"/>
+        <Button text="Add student" onAction="#addStudent" styleClass="nav-button"/>
+        <Button text="Show statistics" onAction="#showStatistics" styleClass="nav-button"/>
+        <Button text="Show students" onAction="#showStudents" styleClass="nav-button"/>
+        <Button text="Show attendance" onAction="#showAttendance" styleClass="nav-button"/>
     </VBox>
 
-    <VBox spacing="10.0" alignment="center" >
-        <ImageView fx:id="cameraView" fitWidth="640" fitHeight="480" preserveRatio="true"/>
-        <Button text = "Start/Stop recording" onAction="#startStopRecording"/>
-        <Label fx:id="errorLabel" alignment="center"/>
+    <VBox spacing="20.0" alignment="CENTER" styleClass="content-panel">
+        <StackPane styleClass="camera-container">
+            <ImageView fx:id="cameraView" fitWidth="640" fitHeight="480" preserveRatio="true"/>
+        </StackPane>
+        
+        <Button text="Start/stop recording to check attendance" onAction="#startStopRecording" styleClass="action-button"/>
+        <Label fx:id="errorLabel" alignment="center" styleClass="status-label"/>
     </VBox>
 </HBox>

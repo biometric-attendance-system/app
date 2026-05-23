@@ -1,0 +1,92 @@
+.main-container {
+    -fx-background-color: #f4f6f9;
+    -fx-padding: 30px;
+}
+
+.sidebar {
+    -fx-background-color: #ffffff;
+    -fx-padding: 25px 15px;
+    -fx-background-radius: 12px;
+    -fx-min-width: 200px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 4);
+}
+
+.sidebar-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #450f52;
+    -fx-padding: 0 0 10px 0;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #a275ab;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-min-width: 180px;
+    -fx-min-height: 40px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 0 0 15px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover {
+    -fx-background-color: #5b305f;
+    -fx-text-fill: #a275ab;
+}
+
+.form-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #a275ab;
+}
+
+.form-field {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 6px;
+    -fx-border-color: #682a7d;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #09030a;
+}
+
+.form-field:focused {
+    -fx-border-color: #2c1235;
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(three-pass-box, rgba(159, 87, 186, 0.2), 4, 0, 0, 0);
+}
+
+.content-panel {
+    -fx-padding: 10px;
+}
+
+.camera-container {
+    -fx-background-color: #000000;
+    -fx-background-radius: 12px;
+    -fx-padding: 4px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 15, 0, 0, 8);
+}
+
+.action-button {
+    -fx-background-color: #6a4576;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 24px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(173, 65, 201, 0.3), 10, 0, 0, 4);
+}
+
+.action-button:hover {
+    -fx-background-color: #472149;
+}
+
+.status-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #e53e3e;
+    -fx-font-weight: bold;
+}

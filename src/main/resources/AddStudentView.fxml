@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.projekt.controller.AddStudentController" spacing="40">
+<HBox styleClass="main-container" stylesheets="@CameraView.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.projekt.controller.AddStudentController" spacing="40">
 
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
@@ -16,32 +16,31 @@
 
     <VBox spacing="15">
 
-        <Button text="Home" onAction="#goHome" prefWidth="120"/>
+        <Button text="Home" onAction="#goHome" prefWidth="120" styleClass="action-button"/>
 
-        <Label fx:id="errorLabel"/>
+        <Label fx:id="errorLabel" styleClass="status-label"/>
 
-        <Label text="First name"/>
-        <TextField fx:id="name" promptText="Enter first name"/>
+        <Label text="First name" styleClass="form-label"/>
+        <TextField fx:id="name" promptText="Enter first name" styleClass="form-field"/>
 
-        <Label text="Surname"/>
-        <TextField fx:id="surname" promptText="Enter last name"/>
+        <Label text="Surname" styleClass="form-label"/>
+        <TextField fx:id="surname" promptText="Enter last name" styleClass="form-field"/>
 
-        <Label text="Album number"/>
-        <TextField fx:id="albumNumber" promptText="Enter album number"/>
+        <Label text="Album number" styleClass="form-label"/>
+        <TextField fx:id="albumNumber" promptText="Enter album number" styleClass="form-field"/>
 
-        <Button text="Save student"
-                onAction="#saveStudent"/>
+        <Button text="Save student" onAction="#saveStudent" styleClass="action-button"/>
 
-        <Label fx:id="fieldsErrorLabel"/>
+        <Label fx:id="fieldsErrorLabel" styleClass="status-label"/>
 
     </VBox>
 
     <VBox spacing="15">
-        <Label text="While recording, try to move your head slightly to capture different angles." alignment="CENTER"/>
-        <ImageView fx:id="cameraView" fitWidth="500" fitHeight="350" preserveRatio="true"/>
+        <Label text="While recording, try to move your head slightly to capture different angles." alignment="CENTER" styleClass="status-label"/>
+        <ImageView fx:id="cameraView" fitWidth="500" fitHeight="350" preserveRatio="true" styleClass="camera-container"/>
 
-        <Button text="Start / Stop Recording" onAction="#startStopRecording"/>
-        <Label fx:id="cameraErrorLabel"/>
+        <Button text="Start / Stop Recording" onAction="#startStopRecording" styleClass="action-button"/>
+        <Label fx:id="cameraErrorLabel" styleClass="status-label"/>
 
     </VBox>
 

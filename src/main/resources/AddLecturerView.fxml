@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.projekt.controller.AddLecturerController" spacing="10">
+<VBox styleClass="main-container" stylesheets="@CameraView.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.projekt.controller.AddLecturerController" spacing="10">
     <HBox spacing="40">
 
         <padding>
@@ -18,29 +18,28 @@
 
         <VBox spacing="15">
 
-            <Label text = "Register before using the App" />
+            <Label text = "Register before using the App" styleClass="form-label"/>
 
-            <Label fx:id="errorLabel"/>
+            <Label fx:id="errorLabel" styleClass="status-label"/>
 
-            <Label text="First name"/>
-            <TextField fx:id="name" promptText="Enter first name"/>
+            <Label text="First name" styleClass="form-label"/>
+            <TextField fx:id="name" promptText="Enter first name" styleClass="form-field"/>
 
-            <Label text="Surname"/>
-            <TextField fx:id="surname" promptText="Enter last name"/>
+            <Label text="Surname" styleClass="form-label"/>
+            <TextField fx:id="surname" promptText="Enter last name" styleClass="form-field"/>
 
-            <Label text="ID number"/>
-            <TextField fx:id="IDnumber" promptText="Enter ID number"/>
+            <Label text="ID number" styleClass="form-label"/>
+            <TextField fx:id="IDnumber" promptText="Enter ID number" styleClass="form-field"/>
 
-            <Label text="Password"/>
-            <PasswordField fx:id="psswd" promptText="Enter password"/>
+            <Label text="Password" styleClass="form-label"/>
+            <PasswordField fx:id="psswd" promptText="Enter password" styleClass="form-field"/>
 
-            <Label text="Confirm password"/>
-            <PasswordField fx:id="confirmPsswd" promptText="Confirm password"/>
+            <Label text="Confirm password" styleClass="form-label"/>
+            <PasswordField fx:id="confirmPsswd" promptText="Confirm password" styleClass="form-field"/>
 
-            <Button text="Save info"
-                    onAction="#saveLecturer"/>
+            <Button text="Save info" onAction="#saveLecturer" styleClass="action-button"/>
 
-            <Label fx:id="fieldsErrorLabel"/>
+            <Label fx:id="fieldsErrorLabel" styleClass="status-label"/>
 
         </VBox>
 
@@ -48,7 +47,7 @@
             <Label text="While recording, try to move your head slightly to capture different angles." alignment="CENTER"/>
             <ImageView fx:id="cameraView" fitWidth="500" fitHeight="350" preserveRatio="true"/>
 
-            <Button text="Start / Stop Recording" onAction="#startStopRecording"/>
+            <Button text="Start / Stop Recording" onAction="#startStopRecording" styleClass="action-button"/>
             <Label fx:id="cameraErrorLabel"/>
         </VBox>
     </HBox>

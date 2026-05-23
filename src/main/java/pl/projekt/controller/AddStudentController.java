@@ -160,10 +160,14 @@ public class AddStudentController {
         });
 
         albumNumber.textProperty().addListener((obs, oldValue, newValue) -> {
-        if (!newValue.matches("\\d*")) {
-            albumNumber.setText(newValue.replaceAll("[^\\d]", ""));
-        }
-    });
+            if (!newValue.matches("\\d*")) {
+                albumNumber.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
+        setupCapitalizationFilter(name);
+        setupCapitalizationFilter(surname);
+
     }
 
     private boolean validateFields() {
@@ -179,6 +183,18 @@ public class AddStudentController {
         }
 
         return true;
+    }
+
+    private void setupCapitalizationFilter(TextField textField) {
+        textField.setTextFormatter(new javafx.scene.control.TextFormatter<>(change -> {
+            String text = change.getText();
+            if (change.getControlNewText().length() > 0 && change.getRangeStart() == 0) {
+                if (!text.isEmpty()) {
+                    change.setText(text.substring(0, 1).toUpperCase() + text.substring(1));
+                }
+            }
+            return change;
+        }));
     }
 
     @FXML public void goHome(ActionEvent event){
