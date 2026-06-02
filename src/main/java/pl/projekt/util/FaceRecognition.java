@@ -4,6 +4,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.nio.IntBuffer;
+import java.util.Arrays;
+
 import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.javacpp.DoublePointer;
 
@@ -27,12 +29,12 @@ public class FaceRecognition{
     private Path tempDir;
     private String albumNumber;
     private int count;
-    private double CONFIDENCE = 40.0;
+    private final double CONFIDENCE = 40.0;
 
     private File getTrainFile(){
         File trainDir = new File(APP_DIR_PATH);
         if (!trainDir.exists()){
-            trainDir.mkdirs();
+            if (!trainDir.mkdirs()) return null;
         } 
         return new File(MODEL_FILE_PATH);
     }
@@ -43,7 +45,7 @@ public class FaceRecognition{
         }
         File trainFile = getTrainFile();
     
-        if (trainFile.exists()) {
+        if (trainFile != null && trainFile.exists()) {
             faceRecognizer.read(trainFile.getAbsolutePath());
         } else {
             return false;
@@ -61,9 +63,7 @@ public class FaceRecognition{
         if (faceRecognizer == null) {
             boolean isLoaded = loadRecognizer();
             if (!isLoaded) {
-                for (int i = 0; i < temp.length; i++) {
-                    temp[i] = "Unknown";
-                }
+                Arrays.fill(temp, "Unknown");
                 return temp; 
             }
         }
@@ -80,7 +80,8 @@ public class FaceRecognition{
                 int height = Math.min(faces.rows() - y, curr.height());
 
                 if (width <= 0 || height <= 0) {
-                    temp[i++] = "Unknown"; 
+                    temp[i] = "Unknown";
+                    i++;
                     continue;
                 }
 
@@ -183,6 +184,9 @@ public class FaceRecognition{
 
         try{
             File trainFile = getTrainFile();
+
+            if (trainFile == null) return false;
+
             if (trainFile.exists()){
                 faceRecognizer.update(images, labelsMat);  
             } else {

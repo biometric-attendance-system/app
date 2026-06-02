@@ -1,40 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 
-<VBox spacing="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="pl.projekt.controller.StudentController">
+<VBox prefHeight="600.0" prefWidth="800.0" spacing="10" styleClass="main-container" stylesheets="@TableView.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.projekt.controller.StudentController">
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
-    <VBox spacing="10" alignment = "CENTER_LEFT">
-        <HBox spacing="10" alignment="CENTER_LEFT"> 
-            <Button text="Home" onAction="#goHome"/>
-            <Label fx:id="errorLabel"/>
+    <VBox alignment="CENTER_LEFT" spacing="10">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Button onAction="#goHome" styleClass="action-button" text="Home" />
+            <Label fx:id="errorLabel" styleClass="error-label" />
         </HBox>
-        <Separator/>
-        <HBox spacing="10" alignment="CENTER_LEFT">        
-            <Label text="Search:"/>
-            <TextField fx:id="filterField" promptText="Type name, surname or album number..." HBox.hgrow="ALWAYS"/>
+        <Separator />
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label styleClass="form-label" text="Search:" />
+            <TextField fx:id="filterField" promptText="Type name, surname or album number..." styleClass="form-field" HBox.hgrow="ALWAYS" />
         </HBox>
     </VBox>
-    <TableView fx:id="studentTable" VBox.vgrow="ALWAYS">
-        <columns>
-            <TableColumn fx:id="nameCol" text="first name" prefWidth="150"/>
-            <TableColumn fx:id="surNameCol" text="last name" prefWidth="150"/>
-            <TableColumn fx:id="albumNumberCol" text="album number" prefWidth="150"/>
-        </columns>
-    </TableView>
-    
-    <Separator/>
 
-    <HBox spacing="10" alignment="CENTER_LEFT"> 
-        <Label text="Delete Student:"/>
-        <TextField fx:id="albumNumberField" promptText="Type album number..." HBox.hgrow="ALWAYS"/>
-        <Button text="Delete" onAction="#deleteStudent"/>
+    <TableView fx:id="studentTable" styleClass="data-table" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="nameCol" prefWidth="150" text="First Name" />
+            <TableColumn fx:id="surNameCol" prefWidth="150" text="Last Name" />
+            <TableColumn fx:id="albumNumberCol" prefWidth="150" text="Album Number" />
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+        </columnResizePolicy>
+    </TableView>
+
+    <Separator />
+
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label styleClass="form-label" text="Delete Student:" />
+        <TextField fx:id="albumNumberField" promptText="Type album number..." styleClass="form-field" HBox.hgrow="ALWAYS" />
+        <Button onAction="#deleteStudent" styleClass="action-button" text="Delete" />
     </HBox>
-    <Label fx:id="deleteLabel"/>
+
+    <Label fx:id="deleteLabel" styleClass="info-label" />
 </VBox>

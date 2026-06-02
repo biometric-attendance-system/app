@@ -6,13 +6,6 @@ public class Lecturer{
     private String lastName;
     private String pinHash;
 
-    public Lecturer(){
-        this.ID = "";
-        this.firstName = "";
-        this.lastName = "";
-        this.pinHash = "";
-    }
-
     public Lecturer(String ID, String firstName, String lastName, String pinHash){
         this.ID = ID;
         this.firstName = firstName;

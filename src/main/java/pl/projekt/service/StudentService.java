@@ -3,36 +3,36 @@ import java.util.ArrayList;
 
 import pl.projekt.models.Student;
 import pl.projekt.repository.StudentRepository;
+import pl.projekt.repository.AttendanceRepository;
 
 public class StudentService{
 
-    private final StudentRepository repository;
+    private final StudentRepository studentRepository;
+    private final AttendanceRepository attendanceRepository;
 
     public StudentService() {
-        this.repository = new StudentRepository();
-    }
-
-    public StudentService(StudentRepository repository){
-        this.repository = repository;
+        this.studentRepository = new StudentRepository();
+        this.attendanceRepository = new AttendanceRepository();
     }
 
     public Boolean deleteStudent(String albumNumber){
-        return repository.deleteStudent(albumNumber);
+        attendanceRepository.deleteAttendances(albumNumber);
+        return studentRepository.deleteStudent(albumNumber);
     }
 
     public Boolean addStudent(Student student){
-        return repository.addStudent(student);
+        return studentRepository.addStudent(student);
     }
 
     public ArrayList<Student> getStudents(){
-        return repository.getStudents();
+        return studentRepository.getStudents();
     }
 
     public Student getStudent(String albumNumber){
-        return repository.getStudent(albumNumber);
+        return studentRepository.getStudent(albumNumber);
     }
 
     public Boolean setStudent(Student student){
-        return repository.setStudent(student);
+        return studentRepository.setStudent(student);
     }
 }

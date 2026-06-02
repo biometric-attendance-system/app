@@ -5,8 +5,7 @@ public class Student{
     private String albumNumber;
     private String firstName;
     private String lastName;
-
-
+    
     public Student(String firstName, String lastName, String albumNumber){
         this.firstName = firstName;
         this.lastName = lastName;

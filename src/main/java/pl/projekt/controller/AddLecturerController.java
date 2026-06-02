@@ -81,7 +81,7 @@ public class AddLecturerController {
 
                 int photoCount = faceRecognition.getPhotoCount();
                 Platform.runLater(() -> 
-                cameraErrorLabel.setText("Photos: " + photoCount + "/60")
+                cameraErrorLabel.setText("Photos: " + photoCount + "/60-100")
             );
             }
 
@@ -161,6 +161,20 @@ public class AddLecturerController {
             IDnumber.setText(newValue.replaceAll("[^\\d]", ""));
         }
     });
+        setupCapitalizationFilter(name);
+        setupCapitalizationFilter(surname);
+    }
+
+    private void setupCapitalizationFilter(TextField textField) {
+        textField.setTextFormatter(new javafx.scene.control.TextFormatter<>(change -> {
+            String text = change.getText();
+            if (change.getControlNewText().length() > 0 && change.getRangeStart() == 0) {
+                if (!text.isEmpty()) {
+                    change.setText(text.substring(0, 1).toUpperCase() + text.substring(1));
+                }
+            }
+            return change;
+        }));
     }
 
     private boolean validatePsswd(){

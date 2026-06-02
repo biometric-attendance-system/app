@@ -154,13 +154,28 @@ public class AttendanceRepository{
         return null;
     }
 
+    public void deleteAttendances(String albumNumber) {
+        String request = "DELETE FROM Attendance WHERE albumNumber = ?;";
+
+        try (Connection myConnection = DriverManager.getConnection(URL);
+             PreparedStatement myStatement = myConnection.prepareStatement(request)) {
+
+            myStatement.setString(1, albumNumber);
+
+            myStatement.executeUpdate();
+
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     private void createTable() {
         try (Connection myConnection = DriverManager.getConnection(URL);
             Statement myStatement = myConnection.createStatement()) {
             String request = "CREATE TABLE IF NOT EXISTS Attendance(albumNumber TEXT, date TEXT, time TEXT, status TEXT); ";
-            
+
             myStatement.execute(request);
-            
+
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
