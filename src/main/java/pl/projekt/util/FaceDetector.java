@@ -1,29 +1,47 @@
 package pl.projekt.util;
 
-import org.bytedeco.opencv.opencv_core.Mat;
-import org.bytedeco.opencv.opencv_core.Rect;
-import org.bytedeco.opencv.opencv_core.RectVector;  
-import org.bytedeco.opencv.opencv_core.Scalar;
-import org.bytedeco.opencv.opencv_core.Size;
+import org.bytedeco.opencv.opencv_core.*;
 import org.bytedeco.opencv.opencv_objdetect.CascadeClassifier;
-import org.bytedeco.opencv.opencv_core.Point;
 
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
+import java.io.*;
 import java.lang.Math;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class FaceDetector{
 
     private CascadeClassifier cascade;
     private Mat grayFrame;
 
+    /**
+     * Constructor loading CascadeClassifier
+     */
     public FaceDetector(){
         cascade = new CascadeClassifier();
-        cascade.load("src/main/resources/haarcascade_frontalface_default.xml");
-        if (cascade.empty()) {
-            System.out.println("Error: cascade not loaded");
-        }
         grayFrame = new Mat();
+
+
+        try (InputStream is = getClass().getResourceAsStream("/haarcascade_frontalface_default.xml")){
+            if (is == null){
+                System.err.println("Error: haarcascade file not exists");
+                return;
+            }
+
+            File tempCascadeFile = File.createTempFile("haarcascade", ".xml");
+            tempCascadeFile.deleteOnExit();
+
+            Files.copy(is, tempCascadeFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            cascade.load(tempCascadeFile.getAbsolutePath());
+            if (cascade.empty()) {
+                System.out.println("Error: cascade not loaded");
+            }
+
+        } catch (IOException e){
+            System.err.println("Error: could not create temp file for cascade, " + e.getMessage());
+        }
     }
 
     public void drawFaces(Mat frame, Rect[] faces){

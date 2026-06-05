@@ -83,6 +83,14 @@ public class AddLecturerController {
                 Platform.runLater(() -> 
                 cameraErrorLabel.setText("Photos: " + photoCount + "/60-100")
             );
+                if (photoCount >= 100) {
+                    Platform.runLater(() -> {
+                        if (cameraManager.isCameraActive()) {
+                            stopRecording();
+                        }
+                    });
+                    return;
+                }
             }
 
             Image imageToShow = cameraManager.convertMatToImage(frame);

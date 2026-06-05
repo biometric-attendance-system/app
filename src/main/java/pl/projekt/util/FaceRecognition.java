@@ -29,7 +29,7 @@ public class FaceRecognition{
     private Path tempDir;
     private String albumNumber;
     private int count;
-    private final double CONFIDENCE = 40.0;
+    private final double CONFIDENCE = 30.0;
 
     private File getTrainFile(){
         File trainDir = new File(APP_DIR_PATH);
@@ -37,6 +37,17 @@ public class FaceRecognition{
             if (!trainDir.mkdirs()) return null;
         } 
         return new File(MODEL_FILE_PATH);
+    }
+
+    private Rect getSafeRect(Mat frame, Rect rect){
+        int x = Math.max(0, rect.x());
+        int y = Math.max(0, rect.y());
+        int width = Math.min(frame.cols() - x, rect.width());
+        int height = Math.min(frame.rows() - y, rect.height());
+
+        if (width <= 0 || height <= 0) return null;
+
+        return new Rect(x,y,width,height);
     }
 
     public boolean loadRecognizer(){
@@ -74,18 +85,13 @@ public class FaceRecognition{
             int i = 0;
             for (Rect curr : pos){
 
-                int x = Math.max(0, curr.x());
-                int y = Math.max(0, curr.y());
-                int width = Math.min(faces.cols() - x, curr.width());
-                int height = Math.min(faces.rows() - y, curr.height());
+                Rect safeRect = getSafeRect(faces, curr);
 
-                if (width <= 0 || height <= 0) {
+                if (safeRect == null) {
                     temp[i] = "Unknown";
                     i++;
                     continue;
                 }
-
-                Rect safeRect = new Rect(x, y, width, height);
 
                 Mat cropped = new Mat(faces,safeRect);
                 Mat grayCropped = new Mat();
@@ -144,7 +150,11 @@ public class FaceRecognition{
     public void saveFace(Mat frame, Rect[] faces){
         if (faces.length != 1 || tempDir == null) return;
 
-        Mat cropped = new Mat(frame, faces[0]);
+        Rect safeRect = getSafeRect(frame, faces[0]);
+
+        if (safeRect == null) return;
+
+        Mat cropped = new Mat(frame, safeRect);
         Mat grayCropped = new Mat();
 
         cvtColor(cropped, grayCropped, COLOR_BGR2GRAY);

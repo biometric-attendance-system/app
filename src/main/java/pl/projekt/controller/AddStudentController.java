@@ -77,7 +77,7 @@ public class AddStudentController {
                 lastSaveTime = currTime;
 
                 int photoCount = faceRecognition.getPhotoCount();
-                Platform.runLater(() -> 
+                Platform.runLater(() ->
                     cameraErrorLabel.setText("Photos: " + photoCount + "/60-100")
                 );
 
@@ -87,7 +87,7 @@ public class AddStudentController {
                             stopRecording();
                         }
                     });
-                    return; 
+                    return;
                 }
             }
 
@@ -97,11 +97,10 @@ public class AddStudentController {
     }
 
     private void stopRecording() {
-        boolean flag = faceRecognition.trainFace();
         cameraManager.closeCamera();
         Platform.runLater(() -> {
             cameraView.setImage(null);
-            if (flag) {
+            if (faceRecognition.trainFace()) {
                 cameraErrorLabel.setText("Camera off. Face model updated");
                 done = true;
             } else {

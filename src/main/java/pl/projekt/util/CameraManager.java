@@ -19,6 +19,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+/**
+ * @brief Class responsible for camera management: opening/closing a camera, image conversion.
+ */
+
 public class CameraManager {
 
     private VideoCapture capture;
@@ -34,15 +38,24 @@ public class CameraManager {
         }
     }
 
+    /**
+     * @brief Constructor initializing CameraManager variables.
+     */
     public CameraManager() {
         this.capture = new VideoCapture();
         this.faceDetector = new FaceDetector();
         this.cameraActive = false;
     }
 
+    /**
+     * @brief Opens camera in capped resolution at about 30 FPS. Every frame is being sent to Consumer class.
+     *
+     * @param onFrameCaptured - an action that performs further actions on taken Mat frame.
+     * @return boolean.
+     */
     public boolean openCamera(Consumer<Mat> onFrameCaptured) {
         if(!cameraActive){
-            capture.open(0);
+            capture.open(0, org.bytedeco.opencv.global.opencv_videoio.CAP_DSHOW);
             capture.set(org.opencv.videoio.Videoio.CAP_PROP_FRAME_WIDTH, 640);
             capture.set(org.opencv.videoio.Videoio.CAP_PROP_FRAME_HEIGHT, 480);
             
@@ -67,6 +80,12 @@ public class CameraManager {
         return false;
     }
 
+    /**
+     * @brief Helper function converting OpenCV Mat class to JavaFX Image class
+     *
+     * @param frame - frame captured.
+     * @return Converted Image class.
+     */
     public Image convertMatToImage(Mat frame) {
         BytePointer buffer = new BytePointer();
         imencode(".bmp", frame, buffer);
@@ -74,14 +93,22 @@ public class CameraManager {
         byte[] bytes = new byte[(int)buffer.limit()];
         buffer.get(bytes);
         buffer.close();
-            
+
         return new Image(new ByteArrayInputStream(bytes));
     }
 
+    /**
+     * @brief Returns whether camera is active.
+     *
+     * @return boolean - true if camera is opened, false otherwise.
+     */
     public boolean isCameraActive() {
         return cameraActive;
     }
 
+    /**
+     * @brief Function responsible for closing camera safely.
+     */
     public void closeCamera() {
         if(cameraActive){
             cameraActive = false;
