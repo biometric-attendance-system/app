@@ -20,6 +20,9 @@ import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 import static org.bytedeco.opencv.global.opencv_face.*;
 import static org.bytedeco.opencv.global.opencv_core.CV_32SC1;
 
+/**
+ * Class responsible for self-training and recognition of faces.
+ */
 public class FaceRecognition{
     private final String APP_DIR_PATH = System.getProperty("user.home") + File.separator + ".FaceRecognitionApp";
     private final String MODEL_FILE_PATH = APP_DIR_PATH + File.separator + "trained_model.yml";
@@ -31,6 +34,11 @@ public class FaceRecognition{
     private int count;
     private final double CONFIDENCE = 30.0;
 
+    /**
+     * Function creating train File.
+     *
+     * @return Train file.
+     */
     private File getTrainFile(){
         File trainDir = new File(APP_DIR_PATH);
         if (!trainDir.exists()){
@@ -39,6 +47,13 @@ public class FaceRecognition{
         return new File(MODEL_FILE_PATH);
     }
 
+    /**
+     * Function checks whether face position is outside frame bounds.
+     *
+     * @param frame - captured frame.
+     * @param rect - position of a face.
+     * @return checked Rect.
+     */
     private Rect getSafeRect(Mat frame, Rect rect){
         int x = Math.max(0, rect.x());
         int y = Math.max(0, rect.y());
@@ -50,6 +65,11 @@ public class FaceRecognition{
         return new Rect(x,y,width,height);
     }
 
+    /**
+     * Function loads LBPH recognizer and uses it to read existing train file.
+     *
+     * @return true if train file exists false otherwise.
+     */
     public boolean loadRecognizer(){
         if (faceRecognizer == null) {
             faceRecognizer = LBPHFaceRecognizer.create();
@@ -64,10 +84,23 @@ public class FaceRecognition{
         return true;
     }
 
+    /**
+     * Function closing faceRecognizer.
+     */
     public void closeRecognizer(){
         faceRecognizer.close();
     }
 
+    /**
+     * Function iterates through face positions and predicts every one.
+     * If prediction's confidence is too low or face position is out of bounds
+     * it is labeled as "unknown". When predicted with satisfying confidence it saves
+     * predicted label (album number or Lecturer ID number) of a face.
+     *
+     * @param faces - frame captured
+     * @param pos - array of found faces
+     * @return array of labels
+     */
     public String[] recognize(Mat faces, Rect[] pos){
         String[] temp = new String[pos.length];
 
@@ -114,6 +147,12 @@ public class FaceRecognition{
         return temp;
     }
 
+    /**
+     * Function that creates temporary directory for a given album or ID number.
+     *
+     * @param albumNumber - album or ID number.
+     * @return true if directory created, false otherwise.
+     */
     public boolean createDir(String albumNumber){
         try{
             tempDir = Files.createTempDirectory("FaceRecognitionApp-" + albumNumber);
@@ -127,6 +166,11 @@ public class FaceRecognition{
         }
     }
 
+    /**
+     * Function that deletes temporary directory and files within it.
+     *
+     * @return true if directory deleted, false otherwise.
+     */
     private boolean deleteDir(){
         if (tempDir==null) return false;
         File dir = tempDir.toFile();
@@ -143,10 +187,22 @@ public class FaceRecognition{
         return true;
     }
 
+    /**
+     * Photo count getter.
+     *
+     * @return number of photos saved.
+     */
     public int getPhotoCount(){
         return count;
     }
 
+    /**
+     * Function that saves cropped face from a frame.
+     * If more than one face is detected it does not save a frame.
+     *
+     * @param frame - frame captured.
+     * @param faces - positions of faces.
+     */
     public void saveFace(Mat frame, Rect[] faces){
         if (faces.length != 1 || tempDir == null) return;
 
@@ -168,8 +224,15 @@ public class FaceRecognition{
         count++;
         cropped.close();      
         grayCropped.close();
-    } 
+    }
 
+    /**
+     * Function that accumulates saved face frames into a MatVector and
+     * trains faceRecognizer a new face with their album or ID number
+     * saved with it as a label.
+     *
+     * @return true if training was successful, false otherwise.
+     */
     public boolean trainFace(){
         if (count < 60) return false;
         if (tempDir == null) return false;

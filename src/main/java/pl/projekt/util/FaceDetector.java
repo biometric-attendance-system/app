@@ -16,7 +16,8 @@ public class FaceDetector{
     private Mat grayFrame;
 
     /**
-     * Constructor loading CascadeClassifier
+     * Constructor loading CascadeClassifier, creates temporary
+     * file to store frontal face data from .jar file.
      */
     public FaceDetector(){
         cascade = new CascadeClassifier();
@@ -44,12 +45,25 @@ public class FaceDetector{
         }
     }
 
+    /**
+     * Function that draws rectangles on frame
+     *
+     * @param frame - captured frame
+     * @param faces - positions of the faces
+     */
     public void drawFaces(Mat frame, Rect[] faces){
         for (var face : faces){
             rectangle(frame, face, new Scalar(102, 255, 178, 0), 3, LINE_8, 0);
         }
     }
 
+    /**
+     * Function that draws rectangles on frame with corresponding labels.
+     *
+     * @param frame - captured frame
+     * @param faces - positions of the faces
+     * @param labels - faces ids
+     */
     public void drawFaces(Mat frame, Rect[] faces, String[] labels){
         for (int i=0; i<faces.length; i++){
             Rect face = faces[i];
@@ -60,6 +74,15 @@ public class FaceDetector{
     }
 
 
+    /**
+     * Detecting faces from provided frame.
+     * Function converts frame to grayscale and invokes
+     * CascadeClassifier's class detectMultiScale method to get positions
+     * of faces (x, y, width and length).
+     *
+     * @param frame - captured frame
+     * @return Rect array representing positions of detected faces
+     */
     public Rect[] getRectFaces(Mat frame){    
         cvtColor(frame, grayFrame, COLOR_BGR2GRAY);
         equalizeHist(grayFrame, grayFrame);
@@ -78,7 +101,10 @@ public class FaceDetector{
         faces.close();  
         return rectFaces;
     }
-    
+
+    /**
+     * Clean-up function
+     */
     public void clean() {
         if (grayFrame != null) grayFrame.close();
         if (cascade != null) cascade.close();
