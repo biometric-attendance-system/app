@@ -9,13 +9,25 @@ import java.util.ArrayList;
 
 import pl.projekt.models.Student;
 
+/**
+ * @brief Class responsible for connection with Students table in Student database.
+ */
 public class StudentRepository{
-    private final String URL = "jdbc:sqlite:Student_db.db";
-    
+    private final String URL = "jdbc:sqlite:Student.db";
+
+    /**
+     * @brief Constructor invokes createTable method to create Students table.
+     */
     public StudentRepository(){
         createTable();
     }
 
+    /**
+     * @brief Function adds student into Students table.
+     *
+     * @param student Given student.
+     * @return True if added, false otherwise.
+     */
     public boolean addStudent(Student student){
         String request = "INSERT OR IGNORE INTO Students(firstName, lastName, albumNumber) Values(?,?,?);";
         
@@ -35,6 +47,12 @@ public class StudentRepository{
         return false;
     }
 
+    /**
+     * @brief Function deletes student from Students table.
+     *
+     * @param albumNumber Student's album number.
+     * @return True if deleted, false otherwise.
+     */
     public boolean deleteStudent(String albumNumber){
         String request = "DELETE FROM Students WHERE albumNumber = ?;";
         try (Connection myConnection = DriverManager.getConnection(URL);
@@ -51,7 +69,11 @@ public class StudentRepository{
         return false;
     }
 
-
+    /**
+     * @brief Function returns all students form the database.
+     *
+     * @return ArrayList of students.
+     */
     public ArrayList<Student> getStudents(){
         String request = "SELECT * FROM Students;";
 
@@ -74,45 +96,9 @@ public class StudentRepository{
         return null;
     }
 
-    public Student getStudent(String albumNumber){
-        String request = "SELECT * FROM Students WHERE albumNumber=?;";
-
-        try (Connection myConnection = DriverManager.getConnection(URL);
-            PreparedStatement myStatement = myConnection.prepareStatement(request)){
-            
-            myStatement.setString(1, albumNumber);
-
-            ResultSet ans = myStatement.executeQuery();
-            
-            if (ans.next()){ 
-                return new Student(ans.getString("firstName"), ans.getString("lastName"),
-                              ans.getString("albumNumber"));
-            }
-
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
-
-    public boolean setStudent(Student student){
-        String request = "UPDATE Students SET firstName = ?, lastName = ? WHERE albumNumber = ?;";
-
-        try (Connection myConnection = DriverManager.getConnection(URL);
-            PreparedStatement myStatement = myConnection.prepareStatement(request)){
-            
-            myStatement.setString(1, student.getFirstName());
-            myStatement.setString(2, student.getLastName());
-
-            int rowsAffected = myStatement.executeUpdate();
-            return rowsAffected > 0;
-
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-        return false;
-    }
-
+    /**
+     * @brief Function creates table Students.
+     */
     private void createTable() {
         try (Connection myConnection = DriverManager.getConnection(URL);
             Statement myStatement = myConnection.createStatement()){

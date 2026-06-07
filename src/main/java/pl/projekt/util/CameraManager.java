@@ -50,8 +50,8 @@ public class CameraManager {
     /**
      * @brief Opens camera in capped resolution at about 30 FPS. Every frame is being sent to Consumer class.
      *
-     * @param onFrameCaptured - an action that performs further actions on taken Mat frame.
-     * @return boolean.
+     * @param onFrameCaptured Consumers that performs further actions on taken Mat frame.
+     * @return True if camera opened false otherwise.
      */
     public boolean openCamera(Consumer<Mat> onFrameCaptured) {
         if(!cameraActive){
@@ -83,7 +83,7 @@ public class CameraManager {
     /**
      * @brief Helper function converting OpenCV Mat class to JavaFX Image class
      *
-     * @param frame - frame captured.
+     * @param frame Frame captured.
      * @return Converted Image class.
      */
     public Image convertMatToImage(Mat frame) {
@@ -100,7 +100,7 @@ public class CameraManager {
     /**
      * @brief Returns whether camera is active.
      *
-     * @return boolean - true if camera is opened, false otherwise.
+     * @return True if camera is opened, false otherwise.
      */
     public boolean isCameraActive() {
         return cameraActive;

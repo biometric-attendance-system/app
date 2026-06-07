@@ -50,9 +50,9 @@ public class FaceRecognition{
     /**
      * Function checks whether face position is outside frame bounds.
      *
-     * @param frame - captured frame.
-     * @param rect - position of a face.
-     * @return checked Rect.
+     * @param frame Captured frame.
+     * @param rect Position of a face.
+     * @return Checked Rect.
      */
     private Rect getSafeRect(Mat frame, Rect rect){
         int x = Math.max(0, rect.x());
@@ -68,7 +68,7 @@ public class FaceRecognition{
     /**
      * Function loads LBPH recognizer and uses it to read existing train file.
      *
-     * @return true if train file exists false otherwise.
+     * @return True if train file exists false otherwise.
      */
     public boolean loadRecognizer(){
         if (faceRecognizer == null) {
@@ -97,9 +97,9 @@ public class FaceRecognition{
      * it is labeled as "unknown". When predicted with satisfying confidence it saves
      * predicted label (album number or Lecturer ID number) of a face.
      *
-     * @param faces - frame captured
-     * @param pos - array of found faces
-     * @return array of labels
+     * @param faces Frame captured
+     * @param pos Array of found faces
+     * @return Array of labels
      */
     public String[] recognize(Mat faces, Rect[] pos){
         String[] temp = new String[pos.length];
@@ -150,8 +150,8 @@ public class FaceRecognition{
     /**
      * Function that creates temporary directory for a given album or ID number.
      *
-     * @param albumNumber - album or ID number.
-     * @return true if directory created, false otherwise.
+     * @param albumNumber Album or ID number.
+     * @return True if directory created, false otherwise.
      */
     public boolean createDir(String albumNumber){
         try{
@@ -169,7 +169,7 @@ public class FaceRecognition{
     /**
      * Function that deletes temporary directory and files within it.
      *
-     * @return true if directory deleted, false otherwise.
+     * @return True if directory deleted, false otherwise.
      */
     private boolean deleteDir(){
         if (tempDir==null) return false;
@@ -190,7 +190,7 @@ public class FaceRecognition{
     /**
      * Photo count getter.
      *
-     * @return number of photos saved.
+     * @return Number of photos saved.
      */
     public int getPhotoCount(){
         return count;
@@ -200,8 +200,8 @@ public class FaceRecognition{
      * Function that saves cropped face from a frame.
      * If more than one face is detected it does not save a frame.
      *
-     * @param frame - frame captured.
-     * @param faces - positions of faces.
+     * @param frame Frame captured.
+     * @param faces Positions of faces.
      */
     public void saveFace(Mat frame, Rect[] faces){
         if (faces.length != 1 || tempDir == null) return;
@@ -231,7 +231,7 @@ public class FaceRecognition{
      * trains faceRecognizer a new face with their album or ID number
      * saved with it as a label.
      *
-     * @return true if training was successful, false otherwise.
+     * @return True if training was successful, false otherwise.
      */
     public boolean trainFace(){
         if (count < 60) return false;

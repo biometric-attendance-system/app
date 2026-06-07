@@ -23,6 +23,10 @@ import pl.projekt.util.CameraManager;
 import pl.projekt.util.FaceDetector;
 import pl.projekt.util.FaceRecognition;
 
+/**
+ * @brief Class responsible for the view to adding a new student, capturing
+ * their face data and saving their information to the database.
+ */
 public class AddStudentController {
 
     @FXML private ImageView cameraView;
@@ -42,6 +46,11 @@ public class AddStudentController {
     private final long intervalsTime = 500;
     boolean done = false;
 
+    /**
+     * @brief Function toggles the camera recording state.
+     * Before opening, it checks whether fields have been
+     * filled in correctly.
+     */
     @FXML 
     public void startStopRecording() {
         fieldsErrorLabel.setText("");
@@ -63,6 +72,12 @@ public class AddStudentController {
         }
     }
 
+    /**
+     * @brief Function is responsible for opening the camera, detecting faces and
+     * capturing them at set intervals until it reaches satisfying number of images.
+     *
+     * @return True if the camera was successfully opened and directory created, false otherwise.
+     */
     private boolean startRecording(){
         if (!faceRecognition.createDir(albumNumber.getText())){
             return false;
@@ -96,6 +111,10 @@ public class AddStudentController {
         });
     }
 
+    /**
+     * @brief Function closes the camera and invokes the
+     * face model training process with captured photos.
+     */
     private void stopRecording() {
         cameraManager.closeCamera();
         Platform.runLater(() -> {
@@ -109,6 +128,11 @@ public class AddStudentController {
         });
     }
 
+    /**
+     * @brief Function checks if fields have been filled in
+     * correctly and whether training model has been updated.
+     * If true, student is added to the database.
+     */
     @FXML
     public void saveStudent() {
         if (!validateFields()) {
@@ -125,19 +149,26 @@ public class AddStudentController {
                 cameraErrorLabel.setText("Student added successfully!");
                 clearFields();
             } else {
-                cameraErrorLabel.setText("Error adding student, chceck if student already exists.");
+                cameraErrorLabel.setText("Error adding student, check if student already exists.");
             }
         } catch (Exception e) {
             cameraErrorLabel.setText("Error: " + e.getMessage());
         }
     }
 
+    /**
+     * @brief Function clears all fields.
+     */
     private void clearFields() {
         name.clear();
         surname.clear();
         albumNumber.clear();
     }
 
+    /**
+     * @brief Function initializes the controller, setts up event
+     * listeners for input validation and text formatting.
+     */
     public void initialize() {
         fieldsErrorLabel.setText("");
         cameraErrorLabel.setText("");
@@ -169,6 +200,10 @@ public class AddStudentController {
 
     }
 
+    /**
+     * @brief Function checks if all fields are filled correctly.
+     * @return True if all fields are valid, false otherwise.
+     */
     private boolean validateFields() {
 
         if (name.getText().trim().isEmpty() || surname.getText().trim().isEmpty() || albumNumber.getText().trim().isEmpty()) {
@@ -184,6 +219,10 @@ public class AddStudentController {
         return true;
     }
 
+    /**
+     * @brief Function capitalizes first letter of a text field.
+     * @param textField Given text field.
+     */
     private void setupCapitalizationFilter(TextField textField) {
         textField.setTextFormatter(new javafx.scene.control.TextFormatter<>(change -> {
             String text = change.getText();
@@ -196,6 +235,11 @@ public class AddStudentController {
         }));
     }
 
+    /**
+     * @brief Function navigates back to the home view.
+     *
+     * @param event ActionEvent triggered by the user interaction.
+     */
     @FXML public void goHome(ActionEvent event){
         try{
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/HomeScreenView.fxml"));

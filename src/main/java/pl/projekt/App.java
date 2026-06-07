@@ -15,9 +15,19 @@ import pl.projekt.controller.LoginController;
 import pl.projekt.controller.AddLecturerController;
 
 
-
+/**
+ * @brief Main application class responsible for initializing and launching
+ * the Biometric Attendance System.
+ */
 public class App extends Application {
 
+    /**
+     * @brief Function initializes the stage, determines which view
+     * to present (login or registration) based on Lecturer database state and
+     * sets up camera closing on exit action.
+     *
+     * @param stage Stage onto which the application's scene can be set.
+     */
     @Override
     public void start(Stage stage) {
         try {

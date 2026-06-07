@@ -26,6 +26,10 @@ import java.util.Set;
 
 import java.io.IOException;
 
+/**
+ * @brief Class responsible for managing home screen, handling view for
+ * facial recognition, logging attendance and navigating to other views.
+ */
 public class HomeController{
 
     @FXML
@@ -40,6 +44,11 @@ public class HomeController{
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     private final Set<String> markedPresent = new HashSet<>();
 
+    /**
+     * @brief Function toggles the camera recording state.
+     * When started, captures faces on the camera feed to mark students as present.
+     * When stopped, it fills remaining students as absent and closes the camera.
+     */
     @FXML
     public void startStopRecording(){
         String date = LocalDate.now().toString();
@@ -89,26 +98,53 @@ public class HomeController{
         }
     }
 
+    /**
+     * @brief Function handles navigation to Add Student view.
+     *
+     * @param event ActionEvent triggered by the user interaction.
+     */
     @FXML
     public void addStudent(ActionEvent event){
         loadScene(event, "/AddStudentView.fxml", "Add Student");
     }
 
+    /**
+     * @brief Function handles navigation to Statistics view.
+     *
+     * @param event ActionEvent triggered by the user interaction.
+     */
     @FXML
     public void showStatistics(ActionEvent event){
         loadScene(event, "/StatisticsView.fxml", "Statistics");
     }
 
+    /**
+     * @brief Function handles navigation to Students view.
+     *
+     * @param event ActionEvent triggered by the user interaction.
+     */
     @FXML 
     public void showStudents(ActionEvent event){
         loadScene(event, "/StudentsView.fxml", "Students List");
     }
 
+    /**
+     * @brief Function handles navigation to Attendance view.
+     *
+     * @param event ActionEvent triggered by the user interaction.
+     */
     @FXML 
     public void showAttendance(ActionEvent event){
         loadScene(event, "/AttendanceView.fxml", "Attendance");
     }
 
+    /**
+     * @brief Helper function to load a new scene (closes the camera if it is active).
+     *
+     * @param event ActionEvent triggered by the user interaction.
+     * @param fxmlPath Path to the FXML file.
+     * @param title Title for the new window.
+     */
     private void loadScene(ActionEvent event, String fxmlPath, String title){
         if(cameraManager.isCameraActive())
             cameraManager.closeCamera();

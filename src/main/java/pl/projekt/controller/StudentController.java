@@ -22,6 +22,10 @@ import java.util.ArrayList;
 import pl.projekt.service.StudentService;
 import pl.projekt.models.Student;
 
+/**
+ * @brief Class responsible for displaying,
+ * filtering, and deleting student records.
+ */
 public class StudentController{
 
     @FXML private Label errorLabel;   
@@ -34,11 +38,14 @@ public class StudentController{
 
     @FXML private TextField albumNumberField;
     @FXML private Label deleteLabel;
-    //@FXML private Label status;
 
     private final StudentService service = new StudentService();
-    private ObservableList<Student> masterData = FXCollections.observableArrayList();
+    private final ObservableList<Student> masterData = FXCollections.observableArrayList();
 
+    /**
+     * @brief Function initializes the controller, loads in data,
+     * sets up table columns and filtering mechanism.
+     */
     @FXML public void initialize(){
         nameCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFirstName()));
         surNameCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLastName()));
@@ -64,6 +71,11 @@ public class StudentController{
 
     }
 
+    /**
+     * @brief Function navigates back to the home screen.
+     *
+     * @param event ActionEvent triggered by user interaction.
+     */
     @FXML public void goHome(ActionEvent event){
         try{
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/HomeScreenView.fxml"));
@@ -80,6 +92,10 @@ public class StudentController{
             } 
     }
 
+    /**
+     * @brief Function handles deleting a student based on a given
+     * album number (with updating the UI).
+     */
     @FXML public void deleteStudent(){
         String num = albumNumberField.getText().trim();
         if (service.deleteStudent(num)){
@@ -94,29 +110,10 @@ public class StudentController{
         visiblePause.play();  
     }
 
- /*   @FXML public void addStudent(){
-        String name = nameField.getText().trim();
-        String surname = surnameField.getText().trim();
-        String album = albumNumberField.getText().trim();    
-
-        if(name.isEmpty() || surname.isEmpty() || album.isEmpty()){
-            status.setText("All fields are required!");    
-            return;
-        }
-
-        Student student = new Student(name, surname, album);
-
-        if(service.addStudent(student)){
-            masterData.add(student);
-            clearFields();
-            status.setText("");
-            System.out.println("Successfully added student: " + album);
-        }
-        else{
-            status.setText("Student " + album + " already exists.");
-        }
-    }
-*/
+    /**
+     * @brief Function loads student data
+     * into the master data list.
+     */
     private void loadData(){
         ArrayList<Student> students = service.getStudents();
         if(students != null)

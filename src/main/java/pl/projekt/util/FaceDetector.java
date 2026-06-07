@@ -48,8 +48,8 @@ public class FaceDetector{
     /**
      * Function that draws rectangles on frame
      *
-     * @param frame - captured frame
-     * @param faces - positions of the faces
+     * @param frame Captured frame
+     * @param faces Positions of the faces
      */
     public void drawFaces(Mat frame, Rect[] faces){
         for (var face : faces){
@@ -60,9 +60,9 @@ public class FaceDetector{
     /**
      * Function that draws rectangles on frame with corresponding labels.
      *
-     * @param frame - captured frame
-     * @param faces - positions of the faces
-     * @param labels - faces ids
+     * @param frame Captured frame
+     * @param faces Positions of the faces
+     * @param labels Faces ids
      */
     public void drawFaces(Mat frame, Rect[] faces, String[] labels){
         for (int i=0; i<faces.length; i++){
@@ -80,7 +80,7 @@ public class FaceDetector{
      * CascadeClassifier's class detectMultiScale method to get positions
      * of faces (x, y, width and length).
      *
-     * @param frame - captured frame
+     * @param frame Captured frame
      * @return Rect array representing positions of detected faces
      */
     public Rect[] getRectFaces(Mat frame){    

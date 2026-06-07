@@ -8,30 +8,25 @@ import java.sql.Statement;
 
 import pl.projekt.models.Lecturer;
 
-
+/**
+ * @brief Class responsible for connection with Lecturers table in Lecturer database.
+ */
 public class LecturerRepository{
-    private final String URL = "jdbc:sqlite:Lecturer_db.db";
+    private final String URL = "jdbc:sqlite:Lecturer.db";
 
+    /**
+     * @brief Constructor invokes createTable method to create Lecturers table.
+     */
     public LecturerRepository(){
         createTable();
     }
 
-    public boolean deleteLecturer(String ID){
-        String request = "DELETE FROM Lecturers WHERE ID = ?;";
-        try (Connection myConnection = DriverManager.getConnection(URL);
-            PreparedStatement myStatement = myConnection.prepareStatement(request)){
-            
-            myStatement.setString(1, ID);
-
-            int rowsAffected = myStatement.executeUpdate();
-
-            return rowsAffected > 0;
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-        return false;
-    }
-
+    /**
+     * @brief Function adds lecturer into Lecturers table.
+     *
+     * @param lecturer Given lecturer.
+     * @return True if added, false otherwise.
+     */
     public boolean addLecturer(Lecturer lecturer){
         String request = "INSERT OR IGNORE INTO Lecturers(firstName, lastName, ID,  pinHash) Values(?,?,?,?);";
         
@@ -52,6 +47,11 @@ public class LecturerRepository{
         return false;
     }
 
+    /**
+     * @brief Function returns lecturer from Lecturers table.
+     *
+     * @return First Lecturer from table.
+     */
     public Lecturer getLecturer(){
         String request = "SELECT * FROM Lecturers;";
 
@@ -71,6 +71,11 @@ public class LecturerRepository{
         return null;
     }
 
+    /**
+     * @brief Function checks whether lecturer's database is empty or not.
+     *
+     * @return True if empty false otherwise.
+     */
     public boolean isEmpty(){
         String request = "SELECT 1 FROM Lecturers;";
 
@@ -86,26 +91,9 @@ public class LecturerRepository{
         return false;
     }
 
-    public boolean setLecturer(Lecturer lecturer){
-        String request = "UPDATE Lecturers SET firstName = ?, lastName = ?, pinHash = ? WHERE ID = ?;";
-
-        try (Connection myConnection = DriverManager.getConnection(URL);
-            PreparedStatement myStatement = myConnection.prepareStatement(request)){
-            
-            myStatement.setString(1, lecturer.getFirstName());
-            myStatement.setString(2, lecturer.getLastName());
-            myStatement.setString(3, lecturer.getPinHash());
-            myStatement.setString(4, lecturer.getID());
-
-            int rowsAffected = myStatement.executeUpdate();
-
-            return rowsAffected > 0;
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-        return false;
-    }
-
+    /**
+     * @brief Function creates table Lecturers.
+     */
     private void createTable() {
         try (Connection myConnection = DriverManager.getConnection(URL);
             Statement myStatement = myConnection.createStatement()){

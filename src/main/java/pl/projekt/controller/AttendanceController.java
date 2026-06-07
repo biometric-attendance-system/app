@@ -24,6 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @brief Class responsible for displaying and filtering
+ * student attendances for specific dates.
+ */
 public class AttendanceController {
 
     @FXML private Label infoLabel;
@@ -39,7 +43,10 @@ public class AttendanceController {
     private final StudentService studentService = new StudentService();
     private final ObservableList<AttendanceRecord> masterData = FXCollections.observableArrayList();
 
-    // Helper class to combine Student and Attendance data for display
+    /**
+     * @brief Helper class representing student and their
+     * attendance details for display in the table.
+     */
     public static class AttendanceRecord {
         private final String album;
         private final String name;
@@ -58,6 +65,10 @@ public class AttendanceController {
         public String getTime() { return time; }
     }
 
+    /**
+     * @brief Function initializes the controller, sets up columns,
+     * configures the date picker and loads data.
+     */
     @FXML public void initialize() {
         datePicker.setValue(LocalDate.now());
 
@@ -74,6 +85,11 @@ public class AttendanceController {
         });
     }
 
+    /**
+     * @brief Function loads student and attendance data for a given date.
+     *
+     * @param date Selected date.
+     */
     private void loadDataByDate(LocalDate date) {
         masterData.clear();
         ArrayList<Student> students = studentService.getStudents();
@@ -107,6 +123,10 @@ public class AttendanceController {
         infoLabel.setText("Data loaded for " + date.toString());
     }
 
+    /**
+     * @brief Function configures the search filter, allowing users to filter
+     * table by student's name, album number or attendance status.
+     */
     private void setupFilter() {
         FilteredList<AttendanceRecord> filteredData = new FilteredList<>(masterData, p -> true);
         filterField.textProperty().addListener((obs, oldVal, newVal) -> {
@@ -121,6 +141,11 @@ public class AttendanceController {
         attendanceTable.setItems(filteredData);
     }
 
+    /**
+     * @brief Function navigates back to the home view.
+     *
+     * @param event ActionEvent triggered by the user interaction.
+     */
     @FXML public void goHome(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/HomeScreenView.fxml"));

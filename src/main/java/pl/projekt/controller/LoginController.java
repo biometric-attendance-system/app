@@ -26,6 +26,10 @@ import pl.projekt.util.CameraManager;
 import pl.projekt.util.FaceDetector;
 import pl.projekt.util.FaceRecognition;
 
+/**
+ * @brief Class responsible for the view to handle both
+ * facial recognition and PIN authentication.
+ */
 public class LoginController{
     @FXML
     private ImageView cameraView;
@@ -45,6 +49,10 @@ public class LoginController{
     private final FaceRecognition faceRecognition = new FaceRecognition();
     boolean found = false;
 
+    /**
+     * @brief Function closes camera
+     * and clears the camera view.
+     */
     public void stopRecording(){
         if(cameraManager.isCameraActive()){
             cameraManager.closeCamera();
@@ -52,6 +60,10 @@ public class LoginController{
         }
     }
 
+    /**
+     * @brief Function initializes the controller, sets up the camera
+     * and searches through captured faces to automatically log in.
+     */
     public void initialize(){
         Lecturer lec = lecturerService.getLecturer();
         if (lec == null){
@@ -67,11 +79,11 @@ public class LoginController{
             if (faces != null && faces.length>0){
                 String[] labels = faceRecognition.recognize(frame, faces);
                 
-                if (labels != null && labels.length>0){
+                if (labels != null && labels.length > 0){
                     for (String label : labels){
                         if (label.equals(ID)){
                             found = true;
-                            Platform.runLater(() -> this.loadHome());
+                            Platform.runLater(this::loadHome);
                         }
                     }
                 }
@@ -86,6 +98,10 @@ public class LoginController{
         }
     }
 
+    /**
+     * @brief After successful logging in function
+     * redirects user to home screen.
+     */
     public void loadHome(){
         stopRecording();
         System.out.println("Logged in succesfully. Changing view to home screen.");
@@ -104,6 +120,12 @@ public class LoginController{
             } 
     }
 
+    /**
+     * @brief Function checks if both login and password match,
+     * displaying an error message if false.
+     *
+     * @param event ActionEvent triggered by an attempt to log in.
+     */
     @FXML
     public void handleLogin(ActionEvent event){
         Lecturer lec = lecturerService.getLecturer();

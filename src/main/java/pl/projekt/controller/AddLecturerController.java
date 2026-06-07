@@ -24,6 +24,11 @@ import pl.projekt.util.CameraManager;
 import pl.projekt.util.FaceDetector;
 import pl.projekt.util.FaceRecognition;
 
+/**
+ * @brief Class responsible for the view to add a new lecturer,
+ * capturing their face data, validating fields and saving the
+ * record in the Lecturer database.
+ */
 public class AddLecturerController {
 
     @FXML private ImageView cameraView;
@@ -45,6 +50,11 @@ public class AddLecturerController {
     private final long intervalsTime = 500;
     boolean done = false;
 
+    /**
+     * @brief Function toggles the camera recording state.
+     * Before opening, it checks whether fields have been
+     * filled in correctly.
+     */
     @FXML 
     public void startStopRecording() {
         fieldsErrorLabel.setText("");
@@ -66,6 +76,12 @@ public class AddLecturerController {
         }
     }
 
+    /**
+     * @brief Function is responsible for opening the camera, detecting faces and
+     * capturing them at set intervals until it reaches satisfying number of images.
+     *
+     * @return True if the camera was successfully opened and directory created, false otherwise.
+     */
     private boolean startRecording(){
         if (!faceRecognition.createDir(IDnumber.getText())){
             return false;
@@ -98,12 +114,15 @@ public class AddLecturerController {
         });
     }
 
+    /**
+     * @brief Function closes the camera and invokes the
+     * face model training process with captured photos.
+     */
     private void stopRecording() {
-        boolean flag = faceRecognition.trainFace();
         cameraManager.closeCamera();
         Platform.runLater(() -> {
             cameraView.setImage(null);
-            if (flag) {
+            if (faceRecognition.trainFace()) {
                 cameraErrorLabel.setText("Camera off. Face model updated");
                 done = true;
             } else {
@@ -112,6 +131,11 @@ public class AddLecturerController {
         });
     }
 
+    /**
+     * @brief Function checks if fields have been filled in
+     * correctly and whether training model has been updated.
+     * If true, student is added to the database.
+     */
     @FXML
     public void saveLecturer() {
         if (!validateFields()) {
@@ -137,6 +161,9 @@ public class AddLecturerController {
         }
     }
 
+    /**
+     * @brief Function clears all fields.
+     */
     private void clearFields() {
         name.clear();
         surname.clear();
@@ -144,6 +171,10 @@ public class AddLecturerController {
         IDnumber.clear();
     }
 
+    /**
+     * @brief Function initializes the controller, setts up event
+     * listeners for input validation and text formatting.
+     */
     public void initialize() {
         fieldsErrorLabel.setText("");
         cameraErrorLabel.setText("");
@@ -173,6 +204,10 @@ public class AddLecturerController {
         setupCapitalizationFilter(surname);
     }
 
+    /**
+     * @brief Function capitalizes first letter of a text field.
+     * @param textField Given text field.
+     */
     private void setupCapitalizationFilter(TextField textField) {
         textField.setTextFormatter(new javafx.scene.control.TextFormatter<>(change -> {
             String text = change.getText();
@@ -185,6 +220,12 @@ public class AddLecturerController {
         }));
     }
 
+    /**
+     * @brief Function validates the password with requirements: at least 8 characters,
+     * one uppercase letter, one digit, one special character and no whitespaces.
+     *
+     * @return True if the password meets all requirements, false otherwise.
+     */
     private boolean validatePsswd(){
         char[] password = psswd.getText().toCharArray();
         boolean capitalizedLetter = false;
@@ -203,6 +244,10 @@ public class AddLecturerController {
         return capitalizedLetter && specialCharacter && number;
     }
 
+    /**
+     * @brief Function checks if all fields are filled correctly.
+     * @return True if all fields are valid, false otherwise.
+     */
     private boolean validateFields() {
 
         if (name.getText().trim().isEmpty() || surname.getText().trim().isEmpty() || IDnumber.getText().trim().isEmpty() || psswd.getText().trim().isEmpty()) {
@@ -228,6 +273,9 @@ public class AddLecturerController {
         return true;
     }
 
+    /**
+     * @brief Function navigates back to the home view.
+     */
     public void goHome(){
         try{
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/HomeScreenView.fxml"));

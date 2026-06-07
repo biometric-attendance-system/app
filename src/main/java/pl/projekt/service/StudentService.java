@@ -5,34 +5,51 @@ import pl.projekt.models.Student;
 import pl.projekt.repository.StudentRepository;
 import pl.projekt.repository.AttendanceRepository;
 
+/**
+ * @brief Class Responsible for Student logic, directly
+ * communicates with StudentRepository.
+ */
 public class StudentService{
 
     private final StudentRepository studentRepository;
     private final AttendanceRepository attendanceRepository;
 
+    /**
+     * @brief Constructor initializing variables.
+     */
     public StudentService() {
         this.studentRepository = new StudentRepository();
         this.attendanceRepository = new AttendanceRepository();
     }
 
-    public Boolean deleteStudent(String albumNumber){
+    /**
+     * @brief Function deletes student from the database.
+     *
+     * @param albumNumber Student's album number.
+     * @return True if deleted false otherwise.
+     */
+    public boolean deleteStudent(String albumNumber){
         attendanceRepository.deleteAttendances(albumNumber);
         return studentRepository.deleteStudent(albumNumber);
     }
 
-    public Boolean addStudent(Student student){
+    /**
+     * @brief Function adds student to the database.
+     *
+     * @param student Given student.
+     * @return True if added false otherwise.
+     */
+    public boolean addStudent(Student student){
         return studentRepository.addStudent(student);
     }
 
+    /**
+     * Function returns all students form the database.
+     *
+     * @return ArrayList of students.
+     */
     public ArrayList<Student> getStudents(){
         return studentRepository.getStudents();
     }
 
-    public Student getStudent(String albumNumber){
-        return studentRepository.getStudent(albumNumber);
-    }
-
-    public Boolean setStudent(Student student){
-        return studentRepository.setStudent(student);
-    }
 }

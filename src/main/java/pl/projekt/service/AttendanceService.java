@@ -5,21 +5,21 @@ import pl.projekt.repository.AttendanceRepository;
 import pl.projekt.models.Student;
 import pl.projekt.service.StudentService;
 
+/**
+ * @brief Service responsible for attendance logic, directly communicates with AttendanceRepository.
+ */
 public class AttendanceService{
     
     private final AttendanceRepository repository = new AttendanceRepository();
     private final StudentService studentService = new StudentService();
 
-    public void addAttendances(String[] albumNumbers, String date, String time, String status){
-        for (String albumNumber : albumNumbers){
-            if (albumNumber.equals("Unknown")) continue;
-            if (studentService.getStudent(albumNumber) == null) continue;
-            if (addAttendance(new Attendance(albumNumber,date,time,status))){
-                System.out.println("Added student: " + albumNumber);
-            } 
-        }
-    }
-
+    /**
+     * @brief After successful recording at HomeController, function fills in absent students
+     * (those who are in the student database but not present at given day in attendance database).
+     *
+     * @param date Given date YEAR:MONTH:DAY
+     * @param time Given time HH:MM:SS
+     */
     public void fillAbsentByDate(String date, String time){
         ArrayList<Attendance> att = getAttendanceByDate(date);
         ArrayList<Student> std = studentService.getStudents();
@@ -42,37 +42,58 @@ public class AttendanceService{
         }
     }
 
-    public boolean addAttendance(Attendance attendance){
+    /**
+     * @brief Function adds attendance to the database.
+     * If student is already present it does not change status.
+     * If student is already absent, it changes status to present.
+     *
+     * @param attendance Attendance object.
+     */
+    public void addAttendance(Attendance attendance){
         String status = repository.getStatus(attendance.getAlbumNumber(), attendance.getDate());
         if ("present".equals(status)){
-            return false;
+            return;
         }
         else if ("absent".equals(status)) {
             repository.setStatus(attendance);
             System.out.println("Changed status: " + attendance.getAlbumNumber());
-            return true;
+            return;
         }
         else if (status == null){
             repository.addAttendance(attendance);
             System.out.println("Added student: " + attendance.getAlbumNumber());
-            return true;
+            return;
         }
         
-        return false;
+        return;
     }
 
-    public ArrayList<Attendance> getAttendances(){
-        return repository.getAttendances();
-    }
-
+    /**
+     * @brief Function filters attendances by given date.
+     *
+     * @param date Given date YEAR:MONTH:DAY.
+     * @return ArrayList of every attendance at given day.
+     */
     public ArrayList<Attendance> getAttendanceByDate(String date){
         return repository.getAttendanceByDate(date);
     }
 
+    /**
+     * @brief Counts number of attendances for a specific person by their album number.
+     *
+     * @param albumNumber Student's album number.
+     * @return Number of attendances.
+     */
     public int countAttendance(String albumNumber){
         return repository.countAttendance(albumNumber);
     }
 
+    /**
+     * @brief Counts number of days when student was present.
+     *
+     * @param albumNumber Student's album number.
+     * @return Number of present days.
+     */
     public int countPresent(String albumNumber){
         return repository.countPresent(albumNumber);
     }

@@ -19,6 +19,10 @@ import pl.projekt.models.Statistics;
 import pl.projekt.service.StatisticsService;
 import java.util.ArrayList;
 
+/**
+ * @brief Class responsible for
+ * displaying and filtering attendance data.
+ */
 public class StatisticsController {
 
     @FXML private Label infoLabel;
@@ -33,6 +37,10 @@ public class StatisticsController {
     private final StatisticsService statisticsService = new StatisticsService();
     private final ObservableList<Statistics> masterData = FXCollections.observableArrayList();
 
+    /**
+     * @brief Function initializes the controller, loads in data,
+     * sets up table columns and filtering mechanism.
+     */
     @FXML
     public void initialize() {
 
@@ -51,6 +59,10 @@ public class StatisticsController {
 
     }
 
+    /**
+     * @brief Function loads statistics data
+     * into the master data list.
+     */
     private void loadStatisticsData() {
         masterData.clear();
         ArrayList<Statistics> statsList = statisticsService.calculateStatistics();
@@ -64,6 +76,10 @@ public class StatisticsController {
         infoLabel.setText("Statistics loaded successfully.");
     }
 
+    /**
+     * @brief Function sets up search filter, allowing to filter
+     * through table by student's name or album number.
+     */
     private void setupFilter() {
         FilteredList<Statistics> filteredData = new FilteredList<>(masterData, p -> true);
         
@@ -82,6 +98,11 @@ public class StatisticsController {
         statsTable.setItems(filteredData);
     }
 
+    /**
+     * @brief Function navigates back to the home screen.
+     *
+     * @param event ActionEvent triggered by user interaction.
+     */
     @FXML 
     public void goHome(ActionEvent event) {
         try {
