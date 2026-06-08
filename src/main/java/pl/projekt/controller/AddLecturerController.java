@@ -92,8 +92,6 @@ public class AddLecturerController {
                 cameraErrorLabel.setText("Error opening camera");
             else 
                 cameraErrorLabel.setText("Recording...");
-        } else {
-            fieldsErrorLabel.setText("All fields are required!");
         }
     }
 
