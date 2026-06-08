@@ -6,7 +6,7 @@ public class Lecturer{
     private String lastName;
     private String passwordHash;
 
-    public Lecturer(String ID, String firstName, String lastName, String passwordHash){
+    public Lecturer(String firstName, String lastName, String ID, String passwordHash){
         this.ID = ID;
         this.firstName = firstName;
         this.lastName = lastName;
