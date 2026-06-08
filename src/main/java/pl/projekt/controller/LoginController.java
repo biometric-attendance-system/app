@@ -28,7 +28,7 @@ import pl.projekt.util.FaceRecognition;
 
 /**
  * @brief Class responsible for the view to handle both
- * facial recognition and PIN authentication.
+ * facial recognition and password authentication.
  */
 public class LoginController{
     @FXML
@@ -43,11 +43,32 @@ public class LoginController{
     @FXML
     private Label errorLabel;
 
-    private final CameraManager cameraManager = new CameraManager();
-    private final LecturerService lecturerService = new LecturerService();
-    private final FaceDetector faceDetector = new FaceDetector();
-    private final FaceRecognition faceRecognition = new FaceRecognition();
+    private final CameraManager cameraManager;
+    private final LecturerService lecturerService;
+    private final FaceDetector faceDetector;
+    private final FaceRecognition faceRecognition;
     boolean found = false;
+
+    /**
+     * @brief Primary constructor.
+     */
+    public LoginController() {
+        this.cameraManager = new CameraManager();
+        this.lecturerService = new LecturerService();
+        this.faceDetector = new FaceDetector();
+        this.faceRecognition = new FaceRecognition();
+    }
+
+    /**
+     * @brief Constructor used for mock tests.
+     */
+    public LoginController(CameraManager cameraManager, LecturerService lecturerService,
+                           FaceDetector faceDetector, FaceRecognition faceRecognition) {
+        this.cameraManager = cameraManager;
+        this.lecturerService = lecturerService;
+        this.faceDetector = faceDetector;
+        this.faceRecognition = faceRecognition;
+    }
 
     /**
      * @brief Function closes camera
@@ -129,7 +150,7 @@ public class LoginController{
     @FXML
     public void handleLogin(ActionEvent event){
         Lecturer lec = lecturerService.getLecturer();
-        if(!(lec.getID().equals(name.getText().trim()) && AuthenticationService.checkPin(password.getText().trim(), lec.getPinHash()))){
+        if(!(lec.getID().equals(name.getText().trim()) && AuthenticationService.checkPassword(password.getText().trim(), lec.getPasswordHash()))){
             errorLabel.setText("Try again!");  
             PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
             

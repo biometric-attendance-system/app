@@ -34,8 +34,22 @@ public class StatisticsController {
     @FXML private TableColumn<Statistics, String> percentCol;
     @FXML private TextField filterField;
 
-    private final StatisticsService statisticsService = new StatisticsService();
+    private final StatisticsService statisticsService;
     private final ObservableList<Statistics> masterData = FXCollections.observableArrayList();
+
+    /**
+     * @brief Primary constructor.
+     */
+    public StatisticsController() {
+        this.statisticsService = new StatisticsService();
+    }
+
+    /**
+     * @brief Constructor used for mock tests.
+     */
+    public StatisticsController(StatisticsService statisticsService) {
+        this.statisticsService = statisticsService;
+    }
 
     /**
      * @brief Function initializes the controller, loads in data,

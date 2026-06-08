@@ -21,6 +21,14 @@ public class StatisticsService{
     }
 
     /**
+     * @brief Constructor used for mock tests.
+     */
+    public StatisticsService(StudentService studentService, AttendanceService attendanceService) {
+        this.studentService = studentService;
+        this.attendanceService = attendanceService;
+    }
+
+    /**
      * @brief Function calculates every student's
      * percentage of present days.
      *

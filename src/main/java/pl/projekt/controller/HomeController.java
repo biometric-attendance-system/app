@@ -37,12 +37,33 @@ public class HomeController{
     @FXML
     private Label errorLabel;
 
-    private final CameraManager cameraManager = new CameraManager();
-    private final FaceDetector faceDetector = new FaceDetector();
-    private final FaceRecognition faceRecognition = new FaceRecognition();
-    private final AttendanceService attendanceService = new AttendanceService();
+    private final CameraManager cameraManager;
+    private final FaceDetector faceDetector;
+    private final FaceRecognition faceRecognition;
+    private final AttendanceService attendanceService;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     private final Set<String> markedPresent = new HashSet<>();
+
+    /**
+     * @brief Primary constructor.
+     */
+    public HomeController() {
+        this.cameraManager = new CameraManager();
+        this.faceDetector = new FaceDetector();
+        this.faceRecognition = new FaceRecognition();
+        this.attendanceService = new AttendanceService();
+    }
+
+    /**
+     * @brief Constructor used for mock tests.
+     */
+    public HomeController(CameraManager cameraManager, FaceDetector faceDetector,
+                          FaceRecognition faceRecognition, AttendanceService attendanceService) {
+        this.cameraManager = cameraManager;
+        this.faceDetector = faceDetector;
+        this.faceRecognition = faceRecognition;
+        this.attendanceService = attendanceService;
+    }
 
     /**
      * @brief Function toggles the camera recording state.

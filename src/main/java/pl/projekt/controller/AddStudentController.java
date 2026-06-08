@@ -18,6 +18,7 @@ import javafx.event.ActionEvent;
 import java.io.IOException;
 
 import pl.projekt.models.Student;
+import pl.projekt.service.LecturerService;
 import pl.projekt.service.StudentService;
 import pl.projekt.util.CameraManager;
 import pl.projekt.util.FaceDetector;
@@ -37,14 +38,35 @@ public class AddStudentController {
     @FXML private Label cameraErrorLabel;
     @FXML private Label errorLabel;
 
-    private final CameraManager cameraManager = new CameraManager();
-    private final StudentService studentService = new StudentService();
-    private final FaceDetector faceDetector = new FaceDetector();
-    private final FaceRecognition faceRecognition = new FaceRecognition();
+    private final CameraManager cameraManager;
+    private final StudentService studentService;
+    private final FaceDetector faceDetector;
+    private final FaceRecognition faceRecognition;
 
     private long lastSaveTime = 0;
     private final long intervalsTime = 500;
     boolean done = false;
+
+    /**
+     * @brief Primary constructor.
+     */
+    public AddStudentController(){
+        cameraManager = new CameraManager();
+        studentService = new StudentService();
+        faceDetector = new FaceDetector();
+        faceRecognition = new FaceRecognition();
+    }
+
+    /**
+     * @brief Constructor used for mock tests.
+     */
+    public AddStudentController(CameraManager cameraManager, StudentService studentService,
+                          FaceDetector faceDetector, FaceRecognition faceRecognition){
+        this.cameraManager = cameraManager;
+        this.studentService = studentService;
+        this.faceDetector = faceDetector;
+        this.faceRecognition = faceRecognition;
+    }
 
     /**
      * @brief Function toggles the camera recording state.

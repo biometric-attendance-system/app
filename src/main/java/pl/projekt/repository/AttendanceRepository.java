@@ -14,12 +14,24 @@ import pl.projekt.models.Attendance;
  */
 public class AttendanceRepository{
 
-    private final String URL = "jdbc:sqlite:Attendance.db";
+    private final String URL;
 
     /**
      * @brief Constructor invokes createTable method to create Attendance table.
      */
-    public AttendanceRepository() { createTable(); }
+    public AttendanceRepository() {
+        this.URL = "jdbc:sqlite:Attendance.db";
+        createTable();
+    }
+
+    /**
+     * @brief Constructor used for mock tests.
+     */
+    public AttendanceRepository(String url) {
+        this.URL = url;
+        createTable();
+    }
+
 
     /**
      * @brief Counts number of days when student was present.

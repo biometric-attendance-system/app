@@ -13,12 +13,22 @@ import pl.projekt.models.Student;
  * @brief Class responsible for connection with Students table in Student database.
  */
 public class StudentRepository{
-    private final String URL = "jdbc:sqlite:Student.db";
+
+    private final String URL;
 
     /**
      * @brief Constructor invokes createTable method to create Students table.
      */
-    public StudentRepository(){
+    public StudentRepository() {
+        this.URL = "jdbc:sqlite:Student.db";
+        createTable();
+    }
+
+    /**
+     * @brief Constructor used for mock tests.
+     */
+    public StudentRepository(String url) {
+        this.URL = url;
         createTable();
     }
 

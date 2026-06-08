@@ -39,8 +39,22 @@ public class StudentController{
     @FXML private TextField albumNumberField;
     @FXML private Label deleteLabel;
 
-    private final StudentService service = new StudentService();
+    private final StudentService service;
     private final ObservableList<Student> masterData = FXCollections.observableArrayList();
+
+    /**
+     * @brief Primary constructor.
+     */
+    public StudentController() {
+        this.service = new StudentService();
+    }
+
+    /**
+     * @brief Constructor used for mock tests.
+     */
+    public StudentController(StudentService service) {
+        this.service = service;
+    }
 
     /**
      * @brief Function initializes the controller, loads in data,

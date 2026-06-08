@@ -9,9 +9,25 @@ import pl.projekt.service.StudentService;
  * @brief Service responsible for attendance logic, directly communicates with AttendanceRepository.
  */
 public class AttendanceService{
-    
-    private final AttendanceRepository repository = new AttendanceRepository();
-    private final StudentService studentService = new StudentService();
+
+    private final AttendanceRepository repository;
+    private final StudentService studentService;
+
+    /**
+     * @brief Constructor prepares repository and service.
+     */
+    public AttendanceService() {
+        this.repository = new AttendanceRepository();
+        this.studentService = new StudentService();
+    }
+
+    /**
+     * @brief Constructor used for mock tests.
+     */
+    public AttendanceService(AttendanceRepository repository, StudentService studentService) {
+        this.repository = repository;
+        this.studentService = studentService;
+    }
 
     /**
      * @brief After successful recording at HomeController, function fills in absent students

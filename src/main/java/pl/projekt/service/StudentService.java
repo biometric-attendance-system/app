@@ -15,11 +15,19 @@ public class StudentService{
     private final AttendanceRepository attendanceRepository;
 
     /**
-     * @brief Constructor initializing variables.
+     * @brief Constructor initializes repositories.
      */
     public StudentService() {
         this.studentRepository = new StudentRepository();
         this.attendanceRepository = new AttendanceRepository();
+    }
+
+    /**
+     * @brief Constructor used for mock tests.
+     */
+    public StudentService(StudentRepository studentRepository, AttendanceRepository attendanceRepository) {
+        this.studentRepository = studentRepository;
+        this.attendanceRepository = attendanceRepository;
     }
 
     /**

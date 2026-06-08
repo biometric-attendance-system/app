@@ -39,9 +39,25 @@ public class AttendanceController {
     @FXML private DatePicker datePicker;
     @FXML private TextField filterField;
 
-    private final AttendanceService attendanceService = new AttendanceService();
-    private final StudentService studentService = new StudentService();
+    private final AttendanceService attendanceService;
+    private final StudentService studentService;
     private final ObservableList<AttendanceRecord> masterData = FXCollections.observableArrayList();
+
+    /**
+     * @brief Primary constructor.
+     */
+    public AttendanceController() {
+        this.attendanceService = new AttendanceService();
+        this.studentService = new StudentService();
+    }
+
+    /**
+     * @brief Constructor used for mock tests.
+     */
+    public AttendanceController(AttendanceService attendanceService, StudentService studentService) {
+        this.attendanceService = attendanceService;
+        this.studentService = studentService;
+    }
 
     /**
      * @brief Helper class representing student and their

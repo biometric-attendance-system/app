@@ -41,14 +41,35 @@ public class AddLecturerController {
     @FXML private Label cameraErrorLabel;
     @FXML private Label errorLabel;
 
-    private final CameraManager cameraManager = new CameraManager();
-    private final LecturerService lecturerService = new LecturerService();
-    private final FaceDetector faceDetector = new FaceDetector();
-    private final FaceRecognition faceRecognition = new FaceRecognition();
+    private final CameraManager cameraManager;
+    private final LecturerService lecturerService;
+    private final FaceDetector faceDetector;
+    private final FaceRecognition faceRecognition;
 
     private long lastSaveTime = 0;
     private final long intervalsTime = 500;
     boolean done = false;
+
+    /**
+     * @brief Primary constructor.
+     */
+    public AddLecturerController(){
+        cameraManager = new CameraManager();
+        lecturerService = new LecturerService();
+        faceDetector = new FaceDetector();
+        faceRecognition = new FaceRecognition();
+    }
+
+    /**
+     * @brief Constructor used for mock tests.
+     */
+    public AddLecturerController(CameraManager cameraManager, LecturerService lecturerService,
+                          FaceDetector faceDetector, FaceRecognition faceRecognition){
+        this.cameraManager = cameraManager;
+        this.lecturerService = lecturerService;
+        this.faceDetector = faceDetector;
+        this.faceRecognition = faceRecognition;
+    }
 
     /**
      * @brief Function toggles the camera recording state.
