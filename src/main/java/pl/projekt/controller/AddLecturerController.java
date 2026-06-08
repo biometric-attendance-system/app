@@ -1,6 +1,5 @@
 package pl.projekt.controller;
 
-import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.Rect;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -13,8 +12,6 @@ import javafx.scene.image.Image;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.scene.Node;
-import javafx.event.ActionEvent;
 
 import java.io.IOException;
 
@@ -167,7 +164,7 @@ public class AddLecturerController {
         }
 
         try {
-            boolean success = lecturerService.addLecturer(new Lecturer(IDnumber.getText().trim(), name.getText().trim(), surname.getText().trim(), psswd.getText()));
+            boolean success = lecturerService.addLecturer(new Lecturer(name.getText().trim(), surname.getText().trim(), IDnumber.getText().trim(), psswd.getText()));
 
             if (success) {
                 cameraErrorLabel.setText("Lecturer added successfully!");

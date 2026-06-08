@@ -1,4 +1,4 @@
-package pl.projekt;
+package pl.projekt.Service;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +26,7 @@ public class LecturerServiceTest {
     @Test
     public void AddLecturerTest() {
         String rawPassword = "MyPassword1!";
-        Lecturer lecturer = new Lecturer("ID", "Name", "Surname", rawPassword);
+        Lecturer lecturer = new Lecturer("Name", "Surname", "ID", rawPassword);
         when(lecturerRepository.addLecturer(any(Lecturer.class))).thenReturn(true);
 
         assertTrue(lecturerService.addLecturer(lecturer));

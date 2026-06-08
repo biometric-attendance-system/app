@@ -1,4 +1,4 @@
-package pl.projekt;
+package pl.projekt.Service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,6 @@ import pl.projekt.service.AttendanceService;
 import pl.projekt.service.StudentService;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

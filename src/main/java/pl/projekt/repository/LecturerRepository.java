@@ -70,8 +70,8 @@ public class LecturerRepository{
             ResultSet ans = myStatement.executeQuery();
             
             if (ans.next()){ 
-                return new Lecturer(ans.getString("ID"), ans.getString("firstName"),
-                              ans.getString("lastName") ,ans.getString("passwordHash"));
+                return new Lecturer(ans.getString("firstName"), ans.getString("lastName"), ans.getString("ID"),
+                        ans.getString("passwordHash"));
             }
 
         } catch (SQLException e){

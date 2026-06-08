@@ -1,4 +1,4 @@
-package pl.projekt;
+package pl.projekt.Service;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
