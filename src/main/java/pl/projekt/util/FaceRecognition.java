@@ -32,7 +32,7 @@ public class FaceRecognition{
     private Path tempDir;
     private String albumNumber;
     private int count;
-    private final double CONFIDENCE = 30.0;
+    private final double CONFIDENCE = 35.0;
 
     /**
      * Function creating train File.
@@ -160,7 +160,7 @@ public class FaceRecognition{
             this.albumNumber = albumNumber;
             return true;
         } catch (Exception e){
-            System.err.println("Error: could not open a temp folder");
+            System.err.println("Error: Could not open a temp folder");
             e.printStackTrace();
             return false;
         }

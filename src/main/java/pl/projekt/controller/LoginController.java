@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -31,17 +32,10 @@ import pl.projekt.util.FaceRecognition;
  * facial recognition and password authentication.
  */
 public class LoginController{
-    @FXML
-    private ImageView cameraView;
-
-    @FXML
-    private TextField name;
-
-    @FXML
-    private PasswordField password;
-
-    @FXML
-    private Label errorLabel;
+    @FXML private ImageView cameraView;
+    @FXML private TextField name;
+    @FXML private PasswordField password;
+    @FXML private Label errorLabel;
 
     private final CameraManager cameraManager;
     private final LecturerService lecturerService;
@@ -70,6 +64,7 @@ public class LoginController{
         this.faceRecognition = faceRecognition;
     }
 
+
     /**
      * @brief Function closes camera
      * and clears the camera view.
@@ -93,7 +88,7 @@ public class LoginController{
         }
         String ID = lec.getID();
         
-        boolean started = cameraManager.openCamera(frame -> {
+        boolean started = cameraManager.openCamera(0,frame -> {
             if (found) return;
             Rect[] faces = faceDetector.getRectFaces(frame);
             
@@ -136,7 +131,7 @@ public class LoginController{
                 stage.show();
             } catch (IOException e) {
                 if( errorLabel != null )
-                    errorLabel.setText("Error: can not load home screen");
+                    errorLabel.setText("Error: Can not load home screen");
                 e.printStackTrace();
             } 
     }

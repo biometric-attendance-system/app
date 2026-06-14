@@ -3,6 +3,49 @@
     -fx-padding: 30px;
 }
 
+.camera-combo {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8px;
+    -fx-border-color: #682a7d;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-padding: 4px 8px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #09030a;
+    -fx-min-height: 44px;
+}
+
+.camera-combo .arrow-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 12px;
+}
+
+.camera-combo .arrow {
+    -fx-background-color: #682a7d;
+}
+
+.camera-combo .list-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #682a7d;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 2px;
+}
+
+.camera-combo .list-cell {
+    -fx-text-fill: #09030a;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 12px;
+    -fx-background-color: transparent;
+    -fx-background-radius: 4px;
+}
+
+.camera-combo .list-cell:filled:selected {
+    -fx-background-color: #5b305f;
+    -fx-text-fill: #ffffff;
+}
+
 .sidebar {
     -fx-background-color: #ffffff;
     -fx-padding: 25px 15px;

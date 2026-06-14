@@ -3,6 +3,7 @@ package pl.projekt.controller;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -23,6 +24,7 @@ import pl.projekt.util.FaceRecognition;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -39,6 +41,7 @@ public class HomeControllerTest extends ApplicationTest {
     @Mock private FaceRecognition faceRecognition;
     @Mock private AttendanceService attendanceService;
 
+    private ComboBox<String> cameraSelector;
     private ImageView cameraView;
     private Label errorLabel;
 
@@ -46,11 +49,14 @@ public class HomeControllerTest extends ApplicationTest {
     public void start(Stage stage) throws Exception {
         cameraView = new ImageView();
         errorLabel = new Label();
+        cameraSelector = new ComboBox<>();
+        cameraSelector.getItems().add("Camera 0");
 
         controller = new HomeController(cameraManager, faceDetector, faceRecognition, attendanceService);
 
         injectField("cameraView", cameraView);
         injectField("errorLabel", errorLabel);
+        injectField("cameraSelector", cameraSelector);
 
         VBox root = new VBox(cameraView, errorLabel);
         stage.setScene(new Scene(root));
@@ -79,11 +85,11 @@ public class HomeControllerTest extends ApplicationTest {
     void shouldShowErrorWhenCameraCannotBeOpened() {
         when(cameraManager.isCameraActive()).thenReturn(false);
         when(faceRecognition.loadRecognizer()).thenReturn(false);
-        when(cameraManager.openCamera(any())).thenReturn(false);
+        when(cameraManager.openCamera(eq(0),any())).thenReturn(false);
 
         interact(() -> controller.startStopRecording());
 
-        assertEquals("Error: can not find camera.", errorLabel.getText());
+        assertEquals("Error: Can not find camera.", errorLabel.getText());
     }
 
     @Test
@@ -91,21 +97,17 @@ public class HomeControllerTest extends ApplicationTest {
         when(cameraManager.isCameraActive()).thenReturn(false);
         when(faceRecognition.loadRecognizer()).thenReturn(true);
 
-        when(cameraManager.openCamera(any())).thenAnswer(invocation -> {
-            Object lambdaCallback = invocation.getArgument(0);
+        when(cameraManager.openCamera(eq(0), any())).thenAnswer(invocation -> {
+            Consumer<Mat> lambdaCallback = invocation.getArgument(1);
+
             Mat mockFrame = mock(Mat.class);
             Rect[] mockFaces = new Rect[]{mock(Rect.class)};
             String[] detectedLabels = new String[]{"123456"};
 
             when(faceDetector.getRectFaces(mockFrame)).thenReturn(mockFaces);
             when(faceRecognition.recognize(mockFrame, mockFaces)).thenReturn(detectedLabels);
+            lambdaCallback.accept(mockFrame);
 
-            for (Method m : lambdaCallback.getClass().getMethods()) {
-                if (m.getParameterCount() == 1 && !m.isDefault() && !Modifier.isStatic(m.getModifiers())) {
-                    m.invoke(lambdaCallback, mockFrame);
-                    break;
-                }
-            }
             return true;
         });
 
@@ -151,9 +153,9 @@ public class HomeControllerTest extends ApplicationTest {
         String currentError = errorLabel.getText();
 
         boolean isExpectedOutcome = currentError.isEmpty()
-                || currentError.equals("Error: can not load /StatisticsView.fxml")
-                || currentError.equals("Error: fxml file does not exist");
+                || currentError.equals("Error: Can not load /StatisticsView.fxml")
+                || currentError.equals("Error: Fxml file does not exist");
 
-        assertTrue(isExpectedOutcome, "Nieoczekiwany stan etykiety błędu: '" + currentError + "'");
+        assertTrue(isExpectedOutcome);
     }
 }

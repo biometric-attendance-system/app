@@ -101,7 +101,7 @@ public class StudentController{
                 stage.show();
             } catch (IOException e) {
                 if( errorLabel != null )
-                    errorLabel.setText("Error: can not load home screen");
+                    errorLabel.setText("Error: Can not load home screen");
                 e.printStackTrace();
             } 
     }

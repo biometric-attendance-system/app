@@ -5,5 +5,6 @@ module pl.projekt {
     requires jbcrypt;
     requires org.bytedeco.opencv;
     exports pl.projekt;
-    opens pl.projekt.controller to javafx.fxml;
+    opens pl.projekt.controller;
+    opens pl.projekt.repository;
 }

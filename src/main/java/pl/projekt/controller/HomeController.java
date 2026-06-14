@@ -1,5 +1,6 @@
 package pl.projekt.controller;
 
+import javafx.scene.control.ComboBox;
 import pl.projekt.util.FaceDetector;
 import pl.projekt.service.AttendanceService;
 import pl.projekt.models.Attendance;
@@ -36,6 +37,8 @@ public class HomeController{
     private ImageView cameraView;
     @FXML
     private Label errorLabel;
+    @FXML
+    private ComboBox<String> cameraSelector;
 
     private final CameraManager cameraManager;
     private final FaceDetector faceDetector;
@@ -66,12 +69,32 @@ public class HomeController{
     }
 
     /**
+     * Function saves numbers of available cameras to a ComboBox.
+     */
+    @FXML
+    public void initialize() {
+        int cameraCount = cameraManager.countCameras();
+
+        for (int i = 0; i < cameraCount; i++) {
+            cameraSelector.getItems().add("Camera " + i);
+        }
+        if (cameraCount > 0) {
+            cameraSelector.getSelectionModel().selectFirst();
+        } else {
+            cameraSelector.setPromptText("No cameras");
+            cameraSelector.setDisable(true);
+        }
+    }
+
+    /**
      * @brief Function toggles the camera recording state.
      * When started, captures faces on the camera feed to mark students as present.
      * When stopped, it fills remaining students as absent and closes the camera.
      */
     @FXML
     public void startStopRecording(){
+        int cameraId = cameraSelector.getSelectionModel().getSelectedIndex();
+        if (cameraId == -1) cameraId = 0;
         String date = LocalDate.now().toString();
         
         if(cameraManager.isCameraActive()){
@@ -83,14 +106,14 @@ public class HomeController{
             boolean success;
 
             if (faceRecognition.loadRecognizer()){
-                success = cameraManager.openCamera(frame -> {
+                success = cameraManager.openCamera(cameraId, frame -> {
                     Rect[] faces = faceDetector.getRectFaces(frame);
                     String[] labels = faceRecognition.recognize(frame, faces);
 
                     faceDetector.drawFaces(frame, faces, labels);
 
                     String time = LocalTime.now().format(formatter);
-                    
+
                     if (labels != null) {
                         for (String label : labels) {
                             if (!label.equals("Unknown") && !markedPresent.contains(label) && label.length()==6) {
@@ -104,7 +127,7 @@ public class HomeController{
                     Platform.runLater(() -> cameraView.setImage(imageToShow));
                 });
             } else {
-                success = cameraManager.openCamera(frame -> {
+                success = cameraManager.openCamera(cameraId, frame -> {
                     Rect[] faces = faceDetector.getRectFaces(frame);
                     faceDetector.drawFaces(frame, faces);
                     Image imageToShow = cameraManager.convertMatToImage(frame);
@@ -113,7 +136,7 @@ public class HomeController{
             }
 
             if (!success)
-                errorLabel.setText("Error: can not find camera.");
+                errorLabel.setText("Error: Can not find camera.");
             else
                 errorLabel.setText("");
         }
@@ -180,11 +203,11 @@ public class HomeController{
             stage.show();
         } catch (IOException e) {
             if( errorLabel != null )
-                errorLabel.setText("Error: can not load " + fxmlPath);
+                errorLabel.setText("Error: Can not load " + fxmlPath);
             e.printStackTrace();
         } catch (NullPointerException e){
             if( errorLabel != null )
-                errorLabel.setText("Error: fxml file does not exist");
+                errorLabel.setText("Error: Fxml file does not exist");
         }
     }
 

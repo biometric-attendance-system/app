@@ -28,6 +28,7 @@ import pl.projekt.util.FaceRecognition;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -89,7 +90,7 @@ public class LoginControllerTest extends ApplicationTest {
     void shouldShowErrorWhenCameraFailsToOpenDuringInitialize() {
         when(lecturerService.getLecturer()).thenReturn(mockLecturer);
         when(mockLecturer.getID()).thenReturn("LECT_001");
-        when(cameraManager.openCamera(any())).thenReturn(false);
+        when(cameraManager.openCamera(eq(0),any())).thenReturn(false);
 
         interact(() -> controller.initialize());
 
@@ -101,8 +102,9 @@ public class LoginControllerTest extends ApplicationTest {
         when(lecturerService.getLecturer()).thenReturn(mockLecturer);
         when(mockLecturer.getID()).thenReturn("LECT_001");
 
-        when(cameraManager.openCamera(any())).thenAnswer(invocation -> {
-            Object lambdaCallback = invocation.getArgument(0);
+        when(cameraManager.openCamera(eq(0), any())).thenAnswer(invocation -> {
+            Consumer<Mat> lambdaCallback = invocation.getArgument(1);
+
             Mat mockFrame = mock(Mat.class);
             Rect[] mockFaces = new Rect[]{mock(Rect.class)};
             String[] labels = new String[]{"LECT_001"};
@@ -110,12 +112,8 @@ public class LoginControllerTest extends ApplicationTest {
             when(faceDetector.getRectFaces(mockFrame)).thenReturn(mockFaces);
             when(faceRecognition.recognize(mockFrame, mockFaces)).thenReturn(labels);
 
-            for (Method m : lambdaCallback.getClass().getMethods()) {
-                if (m.getParameterCount() == 1 && !m.isDefault() && !Modifier.isStatic(m.getModifiers())) {
-                    m.invoke(lambdaCallback, mockFrame);
-                    break;
-                }
-            }
+            lambdaCallback.accept(mockFrame);
+
             return true;
         });
 
@@ -125,10 +123,11 @@ public class LoginControllerTest extends ApplicationTest {
 
         Field foundField = LoginController.class.getDeclaredField("found");
         foundField.setAccessible(true);
+
         assertTrue((boolean) foundField.get(controller));
 
         String currentError = errorLabel.getText();
-        boolean validNavigationOutcome = currentError.isEmpty() || currentError.equals("Error: can not load home screen");
+        boolean validNavigationOutcome = currentError.isEmpty() || currentError.equals("Error: Can not load home screen");
         assertTrue(validNavigationOutcome);
     }
 

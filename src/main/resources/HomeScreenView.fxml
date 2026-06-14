@@ -17,8 +17,12 @@
         <StackPane styleClass="camera-container">
             <ImageView fx:id="cameraView" fitWidth="640" fitHeight="480" preserveRatio="true"/>
         </StackPane>
-        
-        <Button text="Start/stop recording to check attendance" onAction="#startStopRecording" styleClass="action-button"/>
+
+        <HBox spacing="15.0" alignment="CENTER">
+            <ComboBox fx:id="cameraSelector" promptText="Choose camera" styleClass="camera-combo"/>
+            <Button text="Start/stop recording" onAction="#startStopRecording" styleClass="action-button"/>
+        </HBox>
+
         <Label fx:id="errorLabel" alignment="center" styleClass="status-label"/>
     </VBox>
 </HBox>

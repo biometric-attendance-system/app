@@ -1,5 +1,6 @@
 package pl.projekt.controller;
 
+import javafx.scene.control.ComboBox;
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.Rect;
 import javafx.application.Platform;
@@ -37,6 +38,7 @@ public class AddStudentController {
     @FXML private Label fieldsErrorLabel;
     @FXML private Label cameraErrorLabel;
     @FXML private Label errorLabel;
+    @FXML private ComboBox<String> cameraSelector;
 
     private final CameraManager cameraManager;
     private final StudentService studentService;
@@ -104,7 +106,11 @@ public class AddStudentController {
         if (!faceRecognition.createDir(albumNumber.getText())){
             return false;
         }
-        return cameraManager.openCamera(frame -> {
+
+        int cameraId = cameraSelector.getSelectionModel().getSelectedIndex();
+        if (cameraId == -1) cameraId = 0;
+
+        return cameraManager.openCamera(cameraId, frame -> {
             Rect[] faces = faceDetector.getRectFaces(frame);
             faceDetector.drawFaces(frame, faces);
 
@@ -188,10 +194,22 @@ public class AddStudentController {
     }
 
     /**
-     * @brief Function initializes the controller, setts up event
-     * listeners for input validation and text formatting.
+     * @brief Function initializes the controller, setts up ComboBox and
+     * event listeners for input validation and text formatting.
      */
     public void initialize() {
+        int cameraCount = cameraManager.countCameras();
+
+        for (int i = 0; i < cameraCount; i++) {
+            cameraSelector.getItems().add("Camera " + i);
+        }
+        if (cameraCount > 0) {
+            cameraSelector.getSelectionModel().selectFirst();
+        } else {
+            cameraSelector.setPromptText("No cameras");
+            cameraSelector.setDisable(true);
+        }
+
         fieldsErrorLabel.setText("");
         cameraErrorLabel.setText("");
         
@@ -273,7 +291,7 @@ public class AddStudentController {
                 stage.show();
             } catch (IOException e) {
                 if( errorLabel != null )
-                    errorLabel.setText("Error: can not load home screen");
+                    errorLabel.setText("Error: Can not load home screen");
                 e.printStackTrace();
             } 
     }

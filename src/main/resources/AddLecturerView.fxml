@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.ComboBox?>
 <VBox styleClass="main-container" stylesheets="@CameraView.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.projekt.controller.AddLecturerController" spacing="10">
     <HBox spacing="40">
 
@@ -47,14 +48,18 @@
             <Label text="While recording, try to move your head slightly to capture different angles." alignment="CENTER"/>
             <ImageView fx:id="cameraView" fitWidth="500" fitHeight="350" preserveRatio="true"/>
 
-            <Button text="Start / Stop Recording" onAction="#startStopRecording" styleClass="action-button"/>
-            <Label fx:id="cameraErrorLabel"/>
+            <HBox spacing="15.0" alignment="CENTER">
+                <ComboBox fx:id="cameraSelector" promptText="Choose camera" styleClass="camera-combo"/>
+                <Button text="Start/stop recording" onAction="#startStopRecording" styleClass="action-button"/>
+            </HBox>
+
+            <Label fx:id="cameraErrorLabel" alignment="center" styleClass="status-label"/>
         </VBox>
     </HBox>
     
     <Label text="Make sure the password is 8 characters long and contains: at least 1 number, special character and capitalized letter!" alignment="CENTER"/>
     <padding>
-            <Insets top="0" right="0" bottom="20" left="0"/>
+            <Insets bottom="20"/>
     </padding>
 
 </VBox>

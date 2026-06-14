@@ -26,7 +26,7 @@ public class FaceDetector{
 
         try (InputStream is = getClass().getResourceAsStream("/haarcascade_frontalface_default.xml")){
             if (is == null){
-                System.err.println("Error: haarcascade file not exists");
+                System.err.println("Error: Haarcascade file not exists");
                 return;
             }
 
@@ -37,11 +37,11 @@ public class FaceDetector{
 
             cascade.load(tempCascadeFile.getAbsolutePath());
             if (cascade.empty()) {
-                System.out.println("Error: cascade not loaded");
+                System.out.println("Error: Cascade not loaded");
             }
 
         } catch (IOException e){
-            System.err.println("Error: could not create temp file for cascade, " + e.getMessage());
+            System.err.println("Error: Could not create temp file for cascade, " + e.getMessage());
         }
     }
 

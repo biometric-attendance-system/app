@@ -31,6 +31,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
         try {
+            stage.setResizable(false);
             LecturerService check = new LecturerService();
             FXMLLoader loader;
             boolean login = false;

@@ -170,7 +170,7 @@ public class AttendanceController {
             stage.setTitle("Home Screen");
             stage.show();
         } catch (IOException e) {
-            infoLabel.setText("Error loading home screen");
+            infoLabel.setText("Error while loading home screen");
         }
     }
 }

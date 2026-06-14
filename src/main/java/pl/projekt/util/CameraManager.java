@@ -14,6 +14,7 @@ import javafx.scene.image.WritableImage;
 
 import java.io.ByteArrayInputStream;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -48,14 +49,33 @@ public class CameraManager {
     }
 
     /**
+     * Function counts available cameras.
+     *
+     * @return Number of available cameras.
+     */
+    public int countCameras(){
+        int counter = 0;
+
+        for(; counter<5; counter++){
+            if (!capture.open(counter, org.bytedeco.opencv.global.opencv_videoio.CAP_DSHOW)) {
+                counter--;
+                break;
+            }
+            capture.release();
+        }
+
+        return counter;
+    }
+
+    /**
      * @brief Opens camera in capped resolution at about 30 FPS. Every frame is being sent to Consumer class.
      *
      * @param onFrameCaptured Consumers that performs further actions on taken Mat frame.
      * @return True if camera opened false otherwise.
      */
-    public boolean openCamera(Consumer<Mat> onFrameCaptured) {
+    public boolean openCamera(int idx, Consumer<Mat> onFrameCaptured) {
         if(!cameraActive){
-            capture.open(0, org.bytedeco.opencv.global.opencv_videoio.CAP_DSHOW);
+            capture.open(idx , org.bytedeco.opencv.global.opencv_videoio.CAP_DSHOW);
             capture.set(org.opencv.videoio.Videoio.CAP_PROP_FRAME_WIDTH, 640);
             capture.set(org.opencv.videoio.Videoio.CAP_PROP_FRAME_HEIGHT, 480);
             
