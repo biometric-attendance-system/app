@@ -108,30 +108,51 @@ public class HomeController{
             if (faceRecognition.loadRecognizer()){
                 success = cameraManager.openCamera(cameraId, frame -> {
                     Rect[] faces = faceDetector.getRectFaces(frame);
-                    String[] labels = faceRecognition.recognize(frame, faces);
+                    try {
+                        String[] labels = faceRecognition.recognize(frame, faces);
 
-                    faceDetector.drawFaces(frame, faces, labels);
+                        faceDetector.drawFaces(frame, faces, labels);
 
-                    String time = LocalTime.now().format(formatter);
+                        String time = LocalTime.now().format(formatter);
 
-                    if (labels != null) {
-                        for (String label : labels) {
-                            if (!label.equals("Unknown") && !markedPresent.contains(label) && label.length()==6) {
-                                attendanceService.addAttendance(new Attendance(label, date, time, "present"));
-                                markedPresent.add(label);
+                        if (labels != null) {
+                            for (String label : labels) {
+                                if (!label.equals("Unknown") && !markedPresent.contains(label) && label.length()==6) {
+                                    attendanceService.addAttendance(new Attendance(label, date, time, "present"));
+                                    markedPresent.add(label);
+                                }
+                            }
+                        }
+
+                        Image imageToShow = cameraManager.convertMatToImage(frame);
+                        Platform.runLater(() -> cameraView.setImage(imageToShow));
+                    } finally {
+                        if (faces != null) {
+                            for (Rect face : faces) {
+                                if (face != null) {
+                                    face.close();
+                                }
                             }
                         }
                     }
-
-                    Image imageToShow = cameraManager.convertMatToImage(frame);
-                    Platform.runLater(() -> cameraView.setImage(imageToShow));
                 });
             } else {
                 success = cameraManager.openCamera(cameraId, frame -> {
                     Rect[] faces = faceDetector.getRectFaces(frame);
-                    faceDetector.drawFaces(frame, faces);
-                    Image imageToShow = cameraManager.convertMatToImage(frame);
-                    Platform.runLater(() -> cameraView.setImage(imageToShow));
+                    try {
+                        faceDetector.drawFaces(frame, faces);
+                        Image imageToShow = cameraManager.convertMatToImage(frame);
+                        Platform.runLater(() -> cameraView.setImage(imageToShow));
+                    } finally {
+
+                        if (faces != null) {
+                            for (Rect face : faces) {
+                                if (face != null) {
+                                    face.close();
+                                }
+                            }
+                        }
+                    }
                 });
             }
 

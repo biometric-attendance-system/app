@@ -112,30 +112,40 @@ public class AddStudentController {
 
         return cameraManager.openCamera(cameraId, frame -> {
             Rect[] faces = faceDetector.getRectFaces(frame);
-            faceDetector.drawFaces(frame, faces);
+            try {
+                faceDetector.drawFaces(frame, faces);
 
-            long currTime = System.currentTimeMillis();
-            if (currTime - lastSaveTime >= intervalsTime){
-                faceRecognition.saveFace(frame, faces);
-                lastSaveTime = currTime;
+                long currTime = System.currentTimeMillis();
+                if (currTime - lastSaveTime >= intervalsTime){
+                    faceRecognition.saveFace(frame, faces);
+                    lastSaveTime = currTime;
 
-                int photoCount = faceRecognition.getPhotoCount();
-                Platform.runLater(() ->
-                    cameraErrorLabel.setText("Photos: " + photoCount + "/60-100")
-                );
+                    int photoCount = faceRecognition.getPhotoCount();
+                    Platform.runLater(() ->
+                        cameraErrorLabel.setText("Photos: " + photoCount + "/60-100")
+                    );
 
-                if (photoCount >= 100) {
-                    Platform.runLater(() -> {
-                        if (cameraManager.isCameraActive()) {
-                            stopRecording();
+                    if (photoCount >= 100) {
+                        Platform.runLater(() -> {
+                            if (cameraManager.isCameraActive()) {
+                                stopRecording();
+                            }
+                        });
+                        return;
+                    }
+                }
+
+                Image imageToShow = cameraManager.convertMatToImage(frame);
+                Platform.runLater(() -> cameraView.setImage(imageToShow));
+            } finally {
+                if (faces != null) {
+                    for (Rect face : faces) {
+                        if (face != null) {
+                            face.close();
                         }
-                    });
-                    return;
+                    }
                 }
             }
-
-            Image imageToShow = cameraManager.convertMatToImage(frame);
-            Platform.runLater(() -> cameraView.setImage(imageToShow));
         });
     }
 

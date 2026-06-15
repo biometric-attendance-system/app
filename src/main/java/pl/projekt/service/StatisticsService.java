@@ -43,10 +43,12 @@ public class StatisticsService{
 
         int present;
         double mean;
-        int all = attendanceService.countAttendance(studentList.get(0).getAlbumNumber());
+        int all;
     
         for (Student stud : studentList){
             present = attendanceService.countPresent(stud.getAlbumNumber());
+            all = attendanceService.countAttendance(stud.getAlbumNumber());
+
             mean = (all > 0) ? (double) present / (double) all : 0;
             statsList.add(new Statistics(stud.getAlbumNumber(), stud.getFirstName(),
                                          stud.getLastName(), present, all, mean));

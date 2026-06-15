@@ -58,7 +58,6 @@ public class CameraManager {
 
         for(; counter<5; counter++){
             if (!capture.open(counter, org.bytedeco.opencv.global.opencv_videoio.CAP_DSHOW)) {
-                counter--;
                 break;
             }
             capture.release();

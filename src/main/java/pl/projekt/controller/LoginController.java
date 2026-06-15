@@ -91,23 +91,34 @@ public class LoginController{
         boolean started = cameraManager.openCamera(0,frame -> {
             if (found) return;
             Rect[] faces = faceDetector.getRectFaces(frame);
-            
-            if (faces != null && faces.length>0){
-                String[] labels = faceRecognition.recognize(frame, faces);
-                
-                if (labels != null && labels.length > 0){
-                    for (String label : labels){
-                        if (label.equals(ID)){
-                            found = true;
-                            Platform.runLater(this::loadHome);
+
+            try {
+                if (faces != null && faces.length > 0) {
+                    String[] labels = faceRecognition.recognize(frame, faces);
+
+                    if (labels != null && labels.length > 0) {
+                        for (String label : labels) {
+                            if (label.equals(ID)) {
+                                found = true;
+                                Platform.runLater(this::loadHome);
+                            }
+                        }
+                    }
+                    faceDetector.drawFaces(frame, faces);
+                }
+
+                Image imageToShow = cameraManager.convertMatToImage(frame);
+                Platform.runLater(() -> cameraView.setImage(imageToShow));
+            } finally {
+                if (faces != null) {
+                    for (Rect face : faces) {
+                        if (face != null) {
+                            face.close();
                         }
                     }
                 }
-                faceDetector.drawFaces(frame, faces);
             }
 
-            Image imageToShow = cameraManager.convertMatToImage(frame);
-            Platform.runLater(() -> cameraView.setImage(imageToShow));
         });
         if (!started) {
             errorLabel.setText("No camera found!");
