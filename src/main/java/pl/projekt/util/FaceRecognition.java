@@ -101,7 +101,7 @@
          * @param pos Array of found faces
          * @return Array of labels
          */
-        public String[] recognize(Mat faces, Rect[] pos){
+        public String[] recognize(Mat faces, Rect[] pos) {
             String[] temp = new String[pos.length];
 
             if (faceRecognizer == null) {
@@ -112,36 +112,32 @@
                 }
             }
 
-            try(IntPointer label = new IntPointer(1);
-                DoublePointer confidence = new DoublePointer(1);
-                ){
-                int i = 0;
-                for (Rect curr : pos){
+            try (IntPointer label = new IntPointer(1);
+                 DoublePointer confidence = new DoublePointer(1)) {
 
-                    Rect safeRect = getSafeRect(faces, curr);
+                for (int i = 0; i < pos.length; i++) {
+                    Rect safeRect = getSafeRect(faces, pos[i]);
 
                     if (safeRect == null) {
                         temp[i] = "Unknown";
-                        i++;
                         continue;
                     }
 
-                    Mat cropped = new Mat(faces,safeRect);
-                    Mat grayCropped = new Mat();
-                    cvtColor(cropped, grayCropped, COLOR_BGR2GRAY);
-                    equalizeHist(grayCropped, grayCropped);
+                    try (safeRect;
+                         Mat cropped = new Mat(faces, safeRect);
+                         Mat grayCropped = new Mat()) {
 
-                    faceRecognizer.predict(grayCropped, label, confidence);
+                        cvtColor(cropped, grayCropped, COLOR_BGR2GRAY);
+                        equalizeHist(grayCropped, grayCropped);
 
-                    if (confidence.get(0) <= CONFIDENCE){
-                        temp[i] = String.valueOf(label.get(0));
-                    } else {
-                        temp[i] = "Unknown";
+                        faceRecognizer.predict(grayCropped, label, confidence);
+
+                        if (confidence.get(0) <= CONFIDENCE) {
+                            temp[i] = String.valueOf(label.get(0));
+                        } else {
+                            temp[i] = "Unknown";
+                        }
                     }
-
-                    grayCropped.close();
-                    cropped.close();
-                    i++;
                 }
             }
             return temp;
@@ -203,27 +199,27 @@
          * @param frame Frame captured.
          * @param faces Positions of faces.
          */
-        public void saveFace(Mat frame, Rect[] faces){
+        public void saveFace(Mat frame, Rect[] faces) {
             if (faces.length != 1 || tempDir == null) return;
 
             Rect safeRect = getSafeRect(frame, faces[0]);
 
             if (safeRect == null) return;
 
-            Mat cropped = new Mat(frame, safeRect);
-            Mat grayCropped = new Mat();
+            try (safeRect;
+                 Mat cropped = new Mat(frame, safeRect);
+                 Mat grayCropped = new Mat()) {
 
-            cvtColor(cropped, grayCropped, COLOR_BGR2GRAY);
-            equalizeHist(grayCropped, grayCropped);
+                cvtColor(cropped, grayCropped, COLOR_BGR2GRAY);
+                equalizeHist(grayCropped, grayCropped);
 
-            String filePath = tempDir.toAbsolutePath().toString() +
-                            File.separator + albumNumber + "-" + count + ".png";
+                String filePath = tempDir.toAbsolutePath().toString() +
+                        File.separator + albumNumber + "-" + count + ".png";
 
-            imwrite(filePath, grayCropped);
+                imwrite(filePath, grayCropped);
 
-            count++;
-            cropped.close();
-            grayCropped.close();
+                count++;
+            }
         }
 
         /**

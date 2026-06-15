@@ -38,8 +38,11 @@ public class FramePerformanceTest {
         testFrames[1] = imread("src/test/resources/test_frame3faces.jpg");
         testFrames[2] = imread("src/test/resources/test_frame6faces.jpg");
 
-        Rect[] faces = faceDetector.getRectFaces(testFrames[0]);
-        faceRecognition.recognize(testFrames[0], faces);
+    }
+
+    private void helper(int i){
+        Rect[] faces = faceDetector.getRectFaces(testFrames[i]);
+        faceRecognition.recognize(testFrames[i], faces);
         System.out.println("FRAME PERFORMANCE TEST - number of detected faces: " + faces.length);
     }
 
@@ -57,6 +60,7 @@ public class FramePerformanceTest {
 
     @Test
     public void averageTimeOfDetectingFacesLessThan120ms_NumOfFaces1() {
+        helper(0);
         int framesToTest = 100;
         long startTime = System.currentTimeMillis();
 
@@ -83,6 +87,7 @@ public class FramePerformanceTest {
 
     @Test
     public void averageTimeOfDetectingFacesLessThan120ms_NumOfFaces3() {
+        helper(1);
         int framesToTest = 100;
         long startTime = System.currentTimeMillis();
 
@@ -109,6 +114,7 @@ public class FramePerformanceTest {
 
     @Test
     public void averageTimeOfDetectingFacesLessThan120ms_NumOfFaces6() {
+        helper(2);
         int framesToTest = 100;
         long startTime = System.currentTimeMillis();
 
