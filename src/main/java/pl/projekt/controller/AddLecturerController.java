@@ -150,7 +150,7 @@ public class AddLecturerController {
      * @brief Function closes the camera and invokes the
      * face model training process with captured photos.
      */
-    private void stopRecording() {
+    public void stopRecording() {
         cameraManager.closeCamera();
         Platform.runLater(() -> {
             cameraView.setImage(null);

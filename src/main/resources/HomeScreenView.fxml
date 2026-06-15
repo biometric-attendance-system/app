@@ -11,6 +11,7 @@
         <Button text="Show statistics" onAction="#showStatistics" styleClass="nav-button"/>
         <Button text="Show students" onAction="#showStudents" styleClass="nav-button"/>
         <Button text="Show attendance" onAction="#showAttendance" styleClass="nav-button"/>
+        <Button fx:id="resetButton" text="Reset the app" onAction="#resetApplication" styleClass="nav-button"/>
     </VBox>
 
     <VBox spacing="20.0" alignment="CENTER" styleClass="content-panel">

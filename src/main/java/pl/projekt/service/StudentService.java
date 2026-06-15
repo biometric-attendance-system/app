@@ -31,6 +31,13 @@ public class StudentService{
     }
 
     /**
+     * @brief Clears whole database.
+     */
+    public void clear(){
+        studentRepository.clear();
+    }
+
+    /**
      * @brief Function deletes student from the database.
      *
      * @param albumNumber Student's album number.

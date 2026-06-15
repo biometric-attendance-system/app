@@ -30,6 +30,13 @@ public class AttendanceService{
     }
 
     /**
+     * @brief Clears whole database.
+     */
+    public void clear(){
+        repository.clear();
+    }
+
+    /**
      * @brief After successful recording at HomeController, function fills in absent students
      * (those who are in the student database but not present at given day in attendance database).
      *

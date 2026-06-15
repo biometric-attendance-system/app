@@ -60,7 +60,11 @@ public class App extends Application {
                     System.exit(0);  
                 });
             } else {
+                AddLecturerController controller = loader.getController();
                 stage.setOnCloseRequest(event -> {
+                    if (controller != null) {
+                        controller.stopRecording();
+                    }
                     Platform.exit(); 
                     System.exit(0);  
                 });

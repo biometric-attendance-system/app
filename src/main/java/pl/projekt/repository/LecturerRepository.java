@@ -31,6 +31,21 @@ public class LecturerRepository{
     }
 
     /**
+     * @brief Clears whole table.
+     */
+    public void clear(){
+        try (Connection myConnection = DriverManager.getConnection(URL);
+             Statement myStatement = myConnection.createStatement()) {
+            String request = "DELETE FROM Lecturers;";
+
+            myStatement.execute(request);
+
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
      * @brief Function adds lecturer into Lecturers table.
      *
      * @param lecturer Given lecturer.

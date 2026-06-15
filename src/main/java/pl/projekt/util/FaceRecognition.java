@@ -47,6 +47,19 @@
             return new File(MODEL_FILE_PATH);
         }
 
+        public void deleteTrainFile() {
+            File trainFile = new File(MODEL_FILE_PATH);
+
+            if (trainFile.exists()) {
+                boolean deleted = trainFile.delete();
+            }
+
+            File trainDir = new File(APP_DIR_PATH);
+            if (trainDir.exists()){
+                trainDir.delete();
+            }
+        }
+
         /**
          * Function checks whether face position is outside frame bounds.
          *
@@ -88,7 +101,7 @@
          * Function closing faceRecognizer.
          */
         public void closeRecognizer(){
-            faceRecognizer.close();
+            if (faceRecognizer != null) faceRecognizer.close();
         }
 
         /**

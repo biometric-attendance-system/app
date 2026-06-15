@@ -32,6 +32,20 @@ public class AttendanceRepository{
         createTable();
     }
 
+    /**
+     * @brief Clears whole table.
+     */
+    public void clear(){
+        try (Connection myConnection = DriverManager.getConnection(URL);
+             Statement myStatement = myConnection.createStatement()) {
+            String request = "DELETE FROM Attendance;";
+
+            myStatement.execute(request);
+
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
 
     /**
      * @brief Counts number of days when student was present.

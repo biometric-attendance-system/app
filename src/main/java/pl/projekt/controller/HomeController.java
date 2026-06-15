@@ -1,6 +1,11 @@
 package pl.projekt.controller;
 
+import javafx.animation.PauseTransition;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.util.Duration;
+import pl.projekt.service.LecturerService;
+import pl.projekt.service.StudentService;
 import pl.projekt.util.FaceDetector;
 import pl.projekt.service.AttendanceService;
 import pl.projekt.models.Attendance;
@@ -39,11 +44,16 @@ public class HomeController{
     private Label errorLabel;
     @FXML
     private ComboBox<String> cameraSelector;
+    @FXML
+    private Button resetButton;
 
+    private boolean reset;
     private final CameraManager cameraManager;
     private final FaceDetector faceDetector;
     private final FaceRecognition faceRecognition;
     private final AttendanceService attendanceService;
+    private final StudentService studentService;
+    private final LecturerService lecturerService;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     private final Set<String> markedPresent = new HashSet<>();
 
@@ -55,6 +65,8 @@ public class HomeController{
         this.faceDetector = new FaceDetector();
         this.faceRecognition = new FaceRecognition();
         this.attendanceService = new AttendanceService();
+        this.lecturerService = new LecturerService();
+        this.studentService = new StudentService();
     }
 
     /**
@@ -66,6 +78,48 @@ public class HomeController{
         this.faceDetector = faceDetector;
         this.faceRecognition = faceRecognition;
         this.attendanceService = attendanceService;
+        this.studentService = null;
+        this.lecturerService = null;
+    }
+
+    @FXML
+    public void resetApplication(){
+        if (reset){
+
+            if(cameraManager != null && cameraManager.isCameraActive()) cameraManager.closeCamera();
+            if (faceRecognition != null) {
+                faceRecognition.closeRecognizer();
+                faceRecognition.deleteTrainFile();
+            }
+
+            if (attendanceService != null) attendanceService.clear();
+            if (studentService != null) studentService.clear();
+            if (lecturerService != null) lecturerService.clear();
+
+            try{
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddLecturerView.fxml"));
+                Parent root = loader.load();
+
+                Stage stage = (Stage) errorLabel.getScene().getWindow();
+                stage.setTitle("Biometric attendance system");
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                if( errorLabel != null )
+                    errorLabel.setText("Error: Can not load register screen");
+                e.printStackTrace();
+            }
+        } else {
+            reset = true;
+            resetButton.setText("Click again to confirm");
+
+            PauseTransition delay = new PauseTransition(Duration.seconds(5));
+            delay.setOnFinished(ev -> {
+                reset = false;
+                resetButton.setText("Reset the app");
+            });
+            delay.play();
+        }
     }
 
     /**

@@ -33,6 +33,21 @@ public class StudentRepository{
     }
 
     /**
+     * @brief Clears whole table.
+     */
+    public void clear(){
+        try (Connection myConnection = DriverManager.getConnection(URL);
+             Statement myStatement = myConnection.createStatement()) {
+            String request = "DELETE FROM Students;";
+
+            myStatement.execute(request);
+
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
      * @brief Function adds student into Students table.
      *
      * @param student Given student.

@@ -1,5 +1,6 @@
 package pl.projekt.service;
 import pl.projekt.models.Lecturer;
+import pl.projekt.repository.AttendanceRepository;
 import pl.projekt.repository.LecturerRepository;
 
 /**
@@ -22,6 +23,13 @@ public class LecturerService{
      */
     public LecturerService(LecturerRepository repository) {
         this.repository = repository;
+    }
+
+    /**
+     * @brief Clears whole database.
+     */
+    public void clear(){
+        repository.clear();
     }
 
     /**
