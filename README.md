@@ -3,10 +3,10 @@
 A system created for lecturers, it registers students faces and recognizes them to mark student as present.
 ## Technologies
 * **Java 17+**
-* **JavaFX** (user interface)
-* **OpenCV / JavaCV** (image processing and facial recognition)
-* **SQLite** (local database)
-* **Maven** (dependency management)
+* **JavaFX** 
+* **OpenCV / JavaCV** 
+* **SQLite** 
+* **Maven**
 
 ## Key Features
 * **Biometric Authorization:** Uses facial recognition for logging in.
