@@ -7,4 +7,5 @@ module pl.projekt {
     exports pl.projekt;
     opens pl.projekt.controller;
     opens pl.projekt.repository;
+    opens pl.projekt.util;
 }

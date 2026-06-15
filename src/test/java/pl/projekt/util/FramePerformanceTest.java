@@ -1,4 +1,4 @@
-package pl.projekt.performance;
+package pl.projekt.util;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.opencv.opencv_core.Mat;
